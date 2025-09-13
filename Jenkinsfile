@@ -24,68 +24,16 @@ pipeline {
     stages {
         stage('Checkout') {
             
-
-            ///env.REPO_GIT_APP = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
-            
-            
             steps {
                 checkout scm
-                // Clonar el repositorio desde GitHub
-                //env.REPO_GIT_APP = "https://github.com/jyauyo/spring-boot-computadoras.git"
-                //git url: 'https://github.com/jyauyo/spring-boot-computadoras.git', branch: "${params.BRANCH}"
-                //git url: "${env.REPO_GIT_APP}", branch: "${params.BRANCH}"
-
-
-                //def pom = readMavenPom file: 'pom.xml'
-
-                // Access the version property
-                //def mavenVersion = pom.version
-
-                
                 
                 script {
-                    //def urlRepoGit = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
-                    //env.REPO_GIT_APP = urlRepoGit
-                    //env.REPO_GIT_APP = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
-                    //echo "**** Repositorio GIT: ${env.REPO_GIT_APP}"
-
-                    //git url: "${env.REPO_GIT_APP}", branch: "${params.BRANCH}"
-
-                    //def pom = readMavenPom file: 'pom.xml'
-
-                    // Access the version property
-                    def mavenVersion = "1.1.12"//pom.version
-
-                    // Print the version to the console
-                    echo "***** Maven Project Version: ${mavenVersion}"
-                    APP_VERSION = mavenVersion
-                    echo "***** Version: ${APP_VERSION}"
                     
-                    //env.REPO_GIT_APP = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
                     APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
                     echo "***** Version: ${APP_VERSION}"
 
-                    //env.APP_VERSION = '1.1.1'
-
-                    //echo "***** Version: ${env.APP_VERSION}"
-                    //println env.REPO_GIT_APP
-                    //println env.APP_VERSION
                 }
                 
-            }
-        }
-
-
-        stage('Obtener versión Maven') {
-            steps {
-                script {
-                    // Obtiene la versión del pom.xml usando Maven
-                    APP_VERSION = sh(
-                        script: "mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec",
-                        returnStdout: true
-                    ).trim()
-                    echo "*********Versión Maven: ${MAVEN_VERSION}"
-                }
             }
         }
         
@@ -110,11 +58,11 @@ pipeline {
                     """
                    
                    sh "ls -ltr"
-                   sh "docker build -t ${env.DOCKER_REGISTRY}/app-microservice:1.1.1 ."                   
+                   sh "docker build -t ${env.DOCKER_REGISTRY}/app-microservice:${APP_VERSION} ."                   
                }
                
                 withDockerRegistry(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", url: "https://index.docker.io/v1/") {
-                    sh "docker push ${env.DOCKER_REGISTRY}:1.1.1"
+                    sh "docker push ${env.DOCKER_REGISTRY}::${APP_VERSION}"
                 }
             }
                              
