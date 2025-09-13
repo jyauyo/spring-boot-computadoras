@@ -37,7 +37,7 @@ pipeline {
                     echo("***** Project Name: ${projectName}");
                     
                     def pom = readMavenPom file: 'pom.xml'
-                    def nroPase = pom.properties.nroPase
+                    nroPase = pom.properties.nroPase
                     echo "***** NroPase: ${nroPase}"
                 }
                 
