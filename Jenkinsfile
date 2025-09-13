@@ -83,6 +83,8 @@ pipeline {
     
                         // Realiza el commit
                         sh "git commit -m \"${commitMessage}\""
+
+                        sh "argocd login 192.168.184.131:443 -u jyauyo -p ad --insecure"
     
                         // Envía la nueva rama al repositorio remoto
                         sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${projectName}.git origin ${newBranchName}"
