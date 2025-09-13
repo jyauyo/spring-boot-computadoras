@@ -55,7 +55,7 @@ pipeline {
                    def jarName = sh(script: "ls target/*.jar | head -1", returnStdout: true).trim()
                    echo "***** JarName ${jarName}"
 
-                   echo "***** Creating Dockerfile ${jarName}"
+                   echo "***** Creating Dockerfile"
                    writeFile file: 'Dockerfile', text:"""
                    FROM eclipse-temurin:21-jdk-alpine
                    ADD ${jarName} /app/service.jar
