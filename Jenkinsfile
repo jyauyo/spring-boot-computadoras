@@ -78,8 +78,8 @@ pipeline {
                    def docker_registry_complete = "${env.DOCKER_REGISTRY}"
                    echo("***** Docker Registry Pre: ${docker_registry_environment_}");
                    
-                   if (docker_registry_environment_ != null && !docker_registry_environment_.isEmpty()) {
-                       //docker_registry_complete = "${docker_registry_complete}/${docker_registry_environment_}".trim()
+                   if ("${docker_registry_environment_}" != null && !${docker_registry_environment_}.isEmpty()) {
+                       docker_registry_complete = "${docker_registry_complete}/${docker_registry_environment_}".trim()
                    }
                    echo("***** Docker Registry Final: ${docker_registry_complete}");
                    
