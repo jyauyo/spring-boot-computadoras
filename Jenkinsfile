@@ -18,9 +18,9 @@ pipeline {
         maven 'Maven Apache'
     }
 
-    //parameters {
-    //    string(name: 'BRANCH', defaultValue: 'develop', description: '')
-    //}
+    parameters {
+        string(name: 'BRANCH', defaultValue: 'develop', description: '')
+    }
     
     stages {
         stage('Checkout') {
@@ -30,7 +30,7 @@ pipeline {
             
             
             steps {
-                checksout scm
+                checkout scm
                 // Clonar el repositorio desde GitHub
                 //env.REPO_GIT_APP = "https://github.com/jyauyo/spring-boot-computadoras.git"
                 //git url: 'https://github.com/jyauyo/spring-boot-computadoras.git', branch: "${params.BRANCH}"
