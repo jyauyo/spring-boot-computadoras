@@ -70,7 +70,7 @@ pipeline {
                    def projectName = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
                    
                    def dockerfile = 'Dockerfile'
-                   def customImage = docker.build("${env.DOCKER_REGISTRY_COMPLETE}/${projectName}:${APP_VERSION}", "-f ${dockerfile} .")
+                   def customImage = docker.build("${DOCKER_REGISTRY_COMPLETE}/${projectName}:${APP_VERSION}", "-f ${dockerfile} .")
 
                    withCredentials([usernamePassword(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", usernameVariable: 'dockerHubUser', passwordVariable: 'dockerHubPassword')]){
                     //withDockerRegistry(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", url: "${env.DOCKER_URL}") {
@@ -81,8 +81,8 @@ pipeline {
                    }
                    customImage.push()
                }
-               
-               
+
+               sh 'mvn clean'
                
             }
                              
