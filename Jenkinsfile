@@ -32,9 +32,7 @@ pipeline {
 
                 script {
                     def pom = readMavenPom file: 'pom.xml'
-                    echo "Project GroupId: ${pom.groupId}"
-                    echo "Project ArtifactId: ${pom.artifactId}"
-                    echo "Project Version: ${pom.version}"
+                    echo "Project Version: ${pom.nroPase}"
                 }
                 
                 checkout scm
