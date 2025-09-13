@@ -63,12 +63,12 @@ pipeline {
                     echo "***** Version: ${env.APP_VERSION}"
                     
                     //env.REPO_GIT_APP = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
-                    env.APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
-                    echo "***** Version: ${env.APP_VERSION}"
+                    //env.APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
+                    //echo "***** Version: ${env.APP_VERSION}"
 
-                    env.APP_VERSION = '1.1.1'
+                    //env.APP_VERSION = '1.1.1'
 
-                    echo "***** Version: ${env.APP_VERSION}"
+                    //echo "***** Version: ${env.APP_VERSION}"
                     //println env.REPO_GIT_APP
                     //println env.APP_VERSION
                 }
