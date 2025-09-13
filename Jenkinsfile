@@ -37,10 +37,10 @@ pipeline {
                 //git url: "${env.REPO_GIT_APP}", branch: "${params.BRANCH}"
 
 
-                def pom = readMavenPom file: 'pom.xml'
+                //def pom = readMavenPom file: 'pom.xml'
 
                 // Access the version property
-                def mavenVersion = pom.version
+                //def mavenVersion = pom.version
 
                 
                 
@@ -58,9 +58,9 @@ pipeline {
                     //def mavenVersion = pom.version
 
                     // Print the version to the console
-                    echo "***** Maven Project Version: ${mavenVersion}"
-                    env.APP_VERSION = mavenVersion
-                    echo "***** Version: ${env.APP_VERSION}"
+                    //echo "***** Maven Project Version: ${mavenVersion}"
+                    //env.APP_VERSION = mavenVersion
+                    //echo "***** Version: ${env.APP_VERSION}"
                     
                     //env.REPO_GIT_APP = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
                     //env.APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
@@ -87,18 +87,18 @@ pipeline {
            steps {
                script {
 
-                    def jarName = sh(script: "ls target/*.jar | head -1", returnStdout: true).trim()
+                   def jarName = sh(script: "ls target/*.jar | head -1", returnStdout: true).trim()
                    echo "*****JarName ${jarName}"
                     writeFile file: 'Dockerfile', text:"""
                         from eclipse-temurin:21-jre
                         copy ${jarName} /app/service.jar
                         ENTRYPOINT ["java", "-jar", "/app/service.jar"]
                     """
-                    sh "docker build -t ${env.DOCKER_REGISTRY}/app-microservice:${env.APP_VERSION} ."                   
+                    sh "docker build -t ${env.DOCKER_REGISTRY}/app-microservice:1.1.1 ."                   
                }
                
                 withDockerRegistry(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", url: "https://index.docker.io/v1/") {
-                    sh "docker push ${env.DOCKER_REGISTRY}:${env.APP_VERSION}"
+                    sh "docker push ${env.DOCKER_REGISTRY}:1.1.1"
                 }
             }
                              
