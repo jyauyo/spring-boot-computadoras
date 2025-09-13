@@ -6,7 +6,7 @@ pipeline {
         DOCKER_REGISTRY = "jyauyor"
         DOKER_URL = "https://index.docker.io/v1/"
         DOCKER_CREDENTIALS_ID = "dockerhub-credentials"
-        DOCKER_REGISTRY_ENVIRONMENT = "desarrollo"
+        DOCKER_REGISTRY_ENVIRONMENT = ""
     }
     //agent {
     //    docker {
@@ -34,8 +34,8 @@ pipeline {
                     APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
                     echo "***** Version: ${APP_VERSION}"
 
-                    def algo = scm.getUserRemoteConfigs()[0].getUrl()
-                    echo "*****JarName ${algo}"
+                    def algo = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
+                    echo "*****Project name ${algo}"
 
                 }
                 
@@ -56,24 +56,33 @@ pipeline {
                    sh "pwd"
                    def jarName = sh(script: "ls target/*.jar | head -1", returnStdout: true).trim()
                    echo "*****JarName ${jarName}"
-                    writeFile file: 'Dockerfile', text:"""
-                    FROM eclipse-temurin:21-jdk-alpine
-                    ADD ${jarName} /app/service.jar
-                    WORKDIR /app
-                    ENTRYPOINT ["java", "-jar", "/app/service.jar"]
-                    """
+                   writeFile file: 'Dockerfile', text:"""
+                   FROM eclipse-temurin:21-jdk-alpine
+                   ADD ${jarName} /app/service.jar
+                   WORKDIR /app
+                   ENTRYPOINT ["java", "-jar", "/app/service.jar"]
+                   """
                    
                    sh "ls -ltr"
-                   sh "docker build -t ${env.DOCKER_REGISTRY}/${env.DOCKER_REGISTRY_ENVIRONMENT}/app-microservice:${APP_VERSION} ."                   
+                   //sh "docker build -t ${env.DOCKER_REGISTRY}${env.DOCKER_REGISTRY_ENVIRONMENT}/app-microservice:${APP_VERSION} ."
+                   def DOCKER_REGISTRY_COMPLETE = "${env.DOCKER_REGISTRY_ENVIRONMENT}${env.DOCKER_REGISTRY_ENVIRONMENT}"
+
+                   def projectName = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
+                   
+                   def dockerfile = 'Dockerfile'
+                   def customImage = docker.build("${env.DOCKER_REGISTRY_COMPLETE}/${projectName}:${APP_VERSION}", "-f ${dockerfile} .")
+
+                   withCredentials([usernamePassword(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", usernameVariable: 'dockerHubUser', passwordVariable: 'dockerHubPassword')]){
+                    //withDockerRegistry(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", url: "${env.DOCKER_URL}") {
+                    //withCredentials([usernamePassword(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", passwordVariable: 'DOCKER_REGISTRY_PWD', usernameVariable: 'DOCKER_REGISTRY_USER')]) {
+                       echo  "${env.dockerHubPassword} | login --username ${env.dockerHubUser} --password-stdin  ${env.DOCKER_URL}"
+                   
+                       //sh "docker push ${env.DOCKER_REGISTRY}${env.DOCKER_REGISTRY_ENVIRONMENT}/app-microservice:${APP_VERSION}"
+                   }
+                   customImage.push()
                }
                
-               withCredentials([usernamePassword(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", usernameVariable: 'dockerHubUser', passwordVariable: 'dockerHubPassword')]){
-                //withDockerRegistry(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", url: "${env.DOCKER_URL}") {
-                    //withCredentials([usernamePassword(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", passwordVariable: 'DOCKER_REGISTRY_PWD', usernameVariable: 'DOCKER_REGISTRY_USER')]) {
-                   echo  "${env.dockerHubPassword} | login --username ${env.dockerHubUser} --password-stdin  ${env.DOCKER_URL}"
-                   
-                   sh "docker push ${env.DOCKER_REGISTRY}/${env.DOCKER_REGISTRY_ENVIRONMENT}/app-microservice:${APP_VERSION}"
-                }
+               
                
             }
                              
