@@ -34,7 +34,7 @@ pipeline {
             steps {
 
                 script {
-                    projectNameGit = scm.getUserRemoteConfigs()[0].getUrl()
+                    //projectNameGit = scm.getUserRemoteConfigs()[0].getUrl()
                     projectName = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
                     echo("***** Project Name: ${projectName}");
                     
@@ -67,7 +67,7 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                         sh 'git config --global user.email "jenkins@example.com"'
                         sh 'git config --global user.name "Jenkins"'
-                        sh 'git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${projectName}.git'
+                        sh "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${projectName}.git"
                         // Or use the git step directly:
                         // git branch: 'main', credentialsId: 'your-credential-id', url: 'https://github.com/your-org/your-repo.git'
 
