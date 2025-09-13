@@ -27,8 +27,6 @@ pipeline {
         stage('Checkout') {
             
             steps {
-
-                
                 
                 checkout scm
                 
@@ -71,8 +69,8 @@ pipeline {
                    
                    def docker_registry_environment_ = "${env.DOCKER_REGISTRY_ENVIRONMENT}"
                    def docker_registry_complete = "${env.DOCKER_REGISTRY}"
-                   if (docker_registry_environment_ != null) {
-                       docker_registry_complete = "${docker_registry_complete} / ${docker_registry_environment_}".trim()
+                   if (docker_registry_environment_ != null && !docker_registry_environment.isEmpty()) {
+                       docker_registry_complete = "${docker_registry_complete}/${docker_registry_environment_}".trim()
                    }
                    echo("***** Docker Registry: ${docker_registry_complete}");
                    
