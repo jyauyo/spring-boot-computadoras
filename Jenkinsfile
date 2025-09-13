@@ -33,19 +33,18 @@ pipeline {
                 checkout scm
                 
                 script {
-
                     def docker_registry_environment_ = "${env.DOCKER_REGISTRY_ENVIRONMENT}"
-                   def DOCKER_REGISTRY_COMPLETE = "${env.DOCKER_REGISTRY}"
-                   if (docker_registry_environment_ == null) {
-                       DOCKER_REGISTRY_COMPLETE = "${DOCKER_REGISTRY_COMPLETE} / ${docker_registry_environment_}"
-                   }
-                   echo("***** ${DOCKER_REGISTRY_COMPLETE}");
+                    def docker_registry_complete = "${env.DOCKER_REGISTRY}"
+                    if (docker_registry_environment_ == null) {
+                       docker_registry_complete = "${docker_registry_complete} / ${docker_registry_environment_}"
+                    }
+                    echo("***** ${docker_registry_complete}");
                     
                     APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
                     echo "***** Version: ${APP_VERSION}"
 
-                    def algo = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
-                    echo "*****Project name ${algo}"
+                    def projectName = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
+                    echo "*****Project name ${projectName}"
 
                 }
                 
@@ -75,23 +74,15 @@ pipeline {
                    
                    sh "ls -ltr"
                    //sh "docker build -t ${env.DOCKER_REGISTRY}${env.DOCKER_REGISTRY_ENVIRONMENT}/app-microservice:${APP_VERSION} ."
-                   def docker_registry_environment_ = ${env.DOCKER_REGISTRY_ENVIRONMENT}
-                   def DOCKER_REGISTRY_COMPLETE = "${env.DOCKER_REGISTRY}"
-                   if (docker_registry_environment_ == null) {
-                       DOCKER_REGISTRY_COMPLETE = "${DOCKER_REGISTRY_COMPLETE} / ${env.DOCKER_REGISTRY}"
-                   }
-                   println("***** ${DOCKER_REGISTRY_COMPLETE}");
 
-                   def projectName = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
+                   //def projectName = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
                    
                    def dockerfile = 'Dockerfile'
-                   def customImage = docker.build("${DOCKER_REGISTRY_COMPLETE}/${projectName}:${APP_VERSION}", "-f ${dockerfile} .")
+                   def customImage = docker.build("${docker_registry_complete}/${projectName}:${APP_VERSION}", "-f ${dockerfile} .")
 
                    withCredentials([usernamePassword(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", usernameVariable: 'dockerHubUser', passwordVariable: 'dockerHubPassword')]){
                     //withDockerRegistry(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", url: "${env.DOCKER_URL}") {
-                    //withCredentials([usernamePassword(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", passwordVariable: 'DOCKER_REGISTRY_PWD', usernameVariable: 'DOCKER_REGISTRY_USER')]) {
-                       echo  "${env.dockerHubPassword} | login --username ${env.dockerHubUser} --password-stdin  ${env.DOCKER_URL}"
-                   
+                       echo  "${env.dockerHubPassword} | login --username ${env.dockerHubUser} --password-stdin  ${env.DOCKER_URL}"                   
                        //sh "docker push ${env.DOCKER_REGISTRY}${env.DOCKER_REGISTRY_ENVIRONMENT}/app-microservice:${APP_VERSION}"
                    }
                    customImage.push()
@@ -100,8 +91,6 @@ pipeline {
                sh 'mvn clean'
                
             }
-                             
-            //sh "docker push ${DOCKER_REGISTRY}/app-microservice:${env.APP_VERSION} "
         }
     }
     post {
