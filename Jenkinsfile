@@ -58,7 +58,7 @@ pipeline {
                     env.APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
                     echo "***** Version: ${env.APP_VERSION}"
 
-                    env.APP_VERSION = "1.1.1"
+                    env.APP_VERSION = '1.1.1'
 
                     echo "***** Version: ${env.APP_VERSION}"
                     //println env.REPO_GIT_APP
@@ -75,13 +75,12 @@ pipeline {
         }
 
         stage('Build Image') {
-            
-            
 
            steps {
                script {
 
                     def jarName = sh(script: "ls target/*.jar | head -1", returnStdout: true).trim()
+                   echo "*****JarName ${jarName}"
                     writeFile file: 'Dockerfile', text:"""
                         from eclipse-temurin:21-jre
                         copy ${jarName} /app/service.jar
