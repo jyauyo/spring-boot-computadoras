@@ -27,6 +27,14 @@ pipeline {
         stage('Checkout') {
             
             steps {
+
+                def docker_registry_environment_ = ${env.DOCKER_REGISTRY_ENVIRONMENT}
+                   def DOCKER_REGISTRY_COMPLETE = "${env.DOCKER_REGISTRY}"
+                   if (docker_registry_environment_ == null) {
+                       DOCKER_REGISTRY_COMPLETE = "${DOCKER_REGISTRY_COMPLETE} / ${env.DOCKER_REGISTRY}"
+                   }
+                   println("***** ${DOCKER_REGISTRY_COMPLETE}");
+                
                 checkout scm
                 
                 script {
@@ -65,7 +73,12 @@ pipeline {
                    
                    sh "ls -ltr"
                    //sh "docker build -t ${env.DOCKER_REGISTRY}${env.DOCKER_REGISTRY_ENVIRONMENT}/app-microservice:${APP_VERSION} ."
-                   def DOCKER_REGISTRY_COMPLETE = "${env.DOCKER_REGISTRY_ENVIRONMENT}${env.DOCKER_REGISTRY_ENVIRONMENT}"
+                   def docker_registry_environment_ = ${env.DOCKER_REGISTRY_ENVIRONMENT}
+                   def DOCKER_REGISTRY_COMPLETE = "${env.DOCKER_REGISTRY}"
+                   if (docker_registry_environment_ == null) {
+                       DOCKER_REGISTRY_COMPLETE = "${DOCKER_REGISTRY_COMPLETE} / ${env.DOCKER_REGISTRY}"
+                   }
+                   println("***** ${DOCKER_REGISTRY_COMPLETE}");
 
                    def projectName = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
                    
