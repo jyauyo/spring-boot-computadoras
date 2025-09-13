@@ -1,4 +1,4 @@
-def algunavariable
+def projectName
 
 pipeline {
     agent any
@@ -31,8 +31,12 @@ pipeline {
             steps {
 
                 script {
+
+                    projectName = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
+                    echo("***** Project Name: ${projectName}");
+                    
                     def pom = readMavenPom file: 'pom.xml'
-                    echo "Project Version: ${pom}"
+                    echo "***** NroPase: ${pom.properties.nroPase}"
                 }
                 
                 checkout scm
@@ -71,8 +75,8 @@ pipeline {
                    """
 
                    //sh "docker build -t ${env.DOCKER_REGISTRY}${env.DOCKER_REGISTRY_ENVIRONMENT}/app-microservice:${APP_VERSION} ."
-                   def projectName = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
-                   echo("***** Project Name: ${projectName}");
+                   //def projectName = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
+                   //echo("***** Project Name: ${projectName}");
                    
                    def docker_registry_environment_ = "${env.DOCKER_REGISTRY_ENVIRONMENT}"
                    def docker_registry_complete = "${env.DOCKER_REGISTRY}"
