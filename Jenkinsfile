@@ -32,19 +32,10 @@ pipeline {
                 
                 checkout scm
                 
-                script {
-                    def docker_registry_environment_ = "${env.DOCKER_REGISTRY_ENVIRONMENT}"
-                    def docker_registry_complete = "${env.DOCKER_REGISTRY}"
-                    if (docker_registry_environment_ == null) {
-                       docker_registry_complete = "${docker_registry_complete} / ${docker_registry_environment_}"
-                    }
-                    echo("***** ${docker_registry_complete}");
+                script {                    
                     
                     APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
                     echo "***** Version: ${APP_VERSION}"
-
-                    def projectName = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
-                    echo "*****Project name ${projectName}"
 
                 }
                 
@@ -62,20 +53,28 @@ pipeline {
 
            steps {
                script {
-                   sh "pwd"
+
                    def jarName = sh(script: "ls target/*.jar | head -1", returnStdout: true).trim()
-                   echo "*****JarName ${jarName}"
+                   echo "***** JarName ${jarName}"
+
+                   echo "***** Creating Dockerfile ${jarName}"
                    writeFile file: 'Dockerfile', text:"""
                    FROM eclipse-temurin:21-jdk-alpine
                    ADD ${jarName} /app/service.jar
                    WORKDIR /app
                    ENTRYPOINT ["java", "-jar", "/app/service.jar"]
                    """
-                   
-                   sh "ls -ltr"
-                   //sh "docker build -t ${env.DOCKER_REGISTRY}${env.DOCKER_REGISTRY_ENVIRONMENT}/app-microservice:${APP_VERSION} ."
 
-                   //def projectName = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
+                   //sh "docker build -t ${env.DOCKER_REGISTRY}${env.DOCKER_REGISTRY_ENVIRONMENT}/app-microservice:${APP_VERSION} ."
+                   def projectName = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
+                   echo("***** Project Name: ${projectName}");
+                   
+                   def docker_registry_environment_ = "${env.DOCKER_REGISTRY_ENVIRONMENT}"
+                   def docker_registry_complete = "${env.DOCKER_REGISTRY}"
+                   if (docker_registry_environment_ == null) {
+                       docker_registry_complete = "${docker_registry_complete} / ${docker_registry_environment_}"
+                   }
+                   echo("***** Docker Registry: ${docker_registry_complete}");
                    
                    def dockerfile = 'Dockerfile'
                    def customImage = docker.build("${docker_registry_complete}/${projectName}:${APP_VERSION}", "-f ${dockerfile} .")
@@ -85,9 +84,10 @@ pipeline {
                        echo  "${env.dockerHubPassword} | login --username ${env.dockerHubUser} --password-stdin  ${env.DOCKER_URL}"                   
                        //sh "docker push ${env.DOCKER_REGISTRY}${env.DOCKER_REGISTRY_ENVIRONMENT}/app-microservice:${APP_VERSION}"
                    }
+                   echo "***** Publishing to Docker Registry: ${APP_VERSION}"
                    customImage.push()
                }
-
+               echo "***** Cleaning ..."
                sh 'mvn clean'
                
             }
