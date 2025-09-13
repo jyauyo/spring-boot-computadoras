@@ -30,15 +30,26 @@ pipeline {
             
             
             steps {
+                checksout scm
                 // Clonar el repositorio desde GitHub
                 //env.REPO_GIT_APP = "https://github.com/jyauyo/spring-boot-computadoras.git"
-                git url: 'https://github.com/jyauyo/spring-boot-computadoras.git', branch: "${params.BRANCH}"
+                //git url: 'https://github.com/jyauyo/spring-boot-computadoras.git', branch: "${params.BRANCH}"
                 //git url: "${env.REPO_GIT_APP}", branch: "${params.BRANCH}"
                 script {
-                    env.REPO_GIT_APP = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
-                    env.APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
-                    println env.REPO_GIT_APP
-                    println env.APP_VERSION
+
+                    def pom = readMavenPom file: 'pom.xml'
+
+                    // Access the version property
+                    def mavenVersion = pom.version
+
+                    // Print the version to the console
+                    echo "Maven Project Version: ${mavenVersion}"
+                    env.APP_VERSION = mavenVersion
+                    
+                    //env.REPO_GIT_APP = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
+                    //env.APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
+                    //println env.REPO_GIT_APP
+                    //println env.APP_VERSION
                 }
                 
             }
