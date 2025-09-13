@@ -16,9 +16,9 @@ pipeline {
         maven 'Maven Apache'
     }
 
-    parameters {
-        string(name: 'BRANCH', defaultValue: 'algo', description: '')
-    }
+    //parameters {
+    //    string(name: 'BRANCH', defaultValue: 'develop', description: '')
+    //}
     
     stages {
         stage('Checkout') {
@@ -26,7 +26,7 @@ pipeline {
             steps {
                 // Clonar el repositorio desde GitHub
                 //git url: 'https://github.com/jyauyo/spring-boot-computadoras.git', branch: "${params.BRANCH}"
-                env.APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim())
+                env.APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
             }
         }
         stage('Build') {
