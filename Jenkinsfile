@@ -2,7 +2,8 @@ pipeline {
     agent any
     environment {
     //    JAVA_TOOL_OPTIONS = "-Duser.home=/home/jenkins"
-        DOCKER_REGISTRY = credentials('docker-registry')
+        DOCKER_REGISTRY = credentials('docker-registry') //"your_dockerhub_username/your_repository"
+        DOCKER_CREDENTIALS_ID = "dockerhub-credentials"
     }
     //agent {
     //    docker {
@@ -42,8 +43,15 @@ pipeline {
                 copy ${jarName} /app/service.jar
                 ENTRYPOINT ["java", "-jar", "/app/service.jar"]
             """
-            sh "docker build -t ${DOCKER_REGISTRY}/app-microservice:${env.APP_VERSION} ."
-            sh "docker push ${DOCKER_REGISTRY}/app-microservice:${env.APP_VERSION} "
+            sh "docker build -t ${env.DOCKER_REGISTRY}/app-microservice:${env.APP_VERSION} ."
+
+           steps {
+                withDockerRegistry(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", url: "https://index.docker.io/v1/") {
+                    sh "docker push ${env.DOCKER_REGISTRY}:${env.APP_VERSION}"
+                }
+            }
+                             
+            //sh "docker push ${DOCKER_REGISTRY}/app-microservice:${env.APP_VERSION} "
         }
     }
     post {
