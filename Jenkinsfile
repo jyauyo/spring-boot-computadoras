@@ -44,7 +44,7 @@ pipeline {
 
                 
                 
-                //script {
+                script {
                     //def urlRepoGit = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
                     //env.REPO_GIT_APP = urlRepoGit
                     //env.REPO_GIT_APP = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
@@ -55,12 +55,12 @@ pipeline {
                     //def pom = readMavenPom file: 'pom.xml'
 
                     // Access the version property
-                    //def mavenVersion = pom.version
+                    def mavenVersion = "1.1.1"//pom.version
 
                     // Print the version to the console
-                    //echo "***** Maven Project Version: ${mavenVersion}"
-                    //env.APP_VERSION = mavenVersion
-                    //echo "***** Version: ${env.APP_VERSION}"
+                    echo "***** Maven Project Version: ${mavenVersion}"
+                    env.APP_VERSION = mavenVersion
+                    echo "***** Version: ${env.APP_VERSION}"
                     
                     //env.REPO_GIT_APP = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
                     //env.APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
@@ -71,7 +71,7 @@ pipeline {
                     //echo "***** Version: ${env.APP_VERSION}"
                     //println env.REPO_GIT_APP
                     //println env.APP_VERSION
-                //}
+                }
                 
             }
         }
@@ -94,6 +94,8 @@ pipeline {
                         copy ${jarName} /app/service.jar
                         ENTRYPOINT ["java", "-jar", "/app/service.jar"]
                     """
+                   sh "pwd"
+                   sh "ls -ltr"
                     sh "docker build -t ${env.DOCKER_REGISTRY}/app-microservice:1.1.1 ."                   
                }
                
