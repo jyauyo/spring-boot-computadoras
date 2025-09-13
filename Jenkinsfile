@@ -82,7 +82,7 @@ pipeline {
                         sh "git commit -m \"${commitMessage}\""
     
                         // Envía la nueva rama al repositorio remoto
-                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${projectNameGit} origin ${newBranchName}"
+                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${projectName}.git origin ${newBranchName}"
 
                         //sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${projectNameGit} HEAD:main"
                         
