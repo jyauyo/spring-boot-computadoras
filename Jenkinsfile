@@ -4,7 +4,7 @@ pipeline {
     //    JAVA_TOOL_OPTIONS = "-Duser.home=/home/jenkins"
         DOCKER_REGISTRY = credentials('docker-registry') //"your_dockerhub_username/your_repository"
         DOCKER_CREDENTIALS_ID = "dockerhub-credentials"
-        REPO_GIT_APP = ""
+        DOCKER_REGISTRY_ENVIRONMENT = "/desarrollo"
     }
     //agent {
     //    docker {
@@ -59,11 +59,12 @@ pipeline {
                     """
                    
                    sh "ls -ltr"
-                   sh "docker build -t ${env.DOCKER_REGISTRY}/app-microservice:${APP_VERSION} ."                   
+                   sh "docker build -t ${env.DOCKER_REGISTRY}/${env.DOCKER_REGISTRY_ENVIRONMENT}/app-microservice:${APP_VERSION} ."                   
                }
                
                 withDockerRegistry(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", url: "https://index.docker.io/v1/") {
-                    sh "docker push ${env.DOCKER_REGISTRY}::${APP_VERSION}"
+                    //withCredentials([usernamePassword(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", passwordVariable: 'DOCKER_REGISTRY_PWD', usernameVariable: 'DOCKER_REGISTRY_USER')]) {
+                        sh "docker push ${env.DOCKER_REGISTRY}/${env.DOCKER_REGISTRY_ENVIRONMENT}/app-microservice:${APP_VERSION}"
                 }
             }
                              
