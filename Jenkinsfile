@@ -4,7 +4,7 @@ pipeline {
     //    JAVA_TOOL_OPTIONS = "-Duser.home=/home/jenkins"
         DOCKER_REGISTRY = credentials('docker-registry') //"your_dockerhub_username/your_repository"
         DOCKER_CREDENTIALS_ID = "dockerhub-credentials"
-        DOCKER_REGISTRY_ENVIRONMENT = "/desarrollo"
+        DOCKER_REGISTRY_ENVIRONMENT = "desarrollo"
     }
     //agent {
     //    docker {
