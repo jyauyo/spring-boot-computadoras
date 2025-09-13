@@ -41,10 +41,13 @@ pipeline {
                     def pom = readMavenPom file: 'pom.xml'
                     nroPase = pom.properties.nroPase
                     echo "***** NroPase: ${nroPase}"
+                    sh "pwd"
                     sh "cd .."
+                    sh "pwd"
                     sh "mkdir ${nroPase}"
+                    sh "pwd"
                     sh "cd ${nroPase}"
-                    
+                    sh "pwd"
                     withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                         sh 'git config --global user.email "jenkins@example.com"'
                         sh 'git config --global user.name "Jenkins"'
