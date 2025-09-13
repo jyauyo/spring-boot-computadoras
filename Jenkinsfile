@@ -31,12 +31,16 @@ pipeline {
             
             steps {
                 // Clonar el repositorio desde GitHub
-                env.REPO_GIT_APP = "https://github.com/jyauyo/spring-boot-computadoras.git"
-                //git url: 'https://github.com/jyauyo/spring-boot-computadoras.git', branch: "${params.BRANCH}"
-                git url: "${env.REPO_GIT_APP}", branch: "${params.BRANCH}"
-                env.APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
-                println env.REPO_GIT_APP
-                println env.APP_VERSION
+                //env.REPO_GIT_APP = "https://github.com/jyauyo/spring-boot-computadoras.git"
+                git url: 'https://github.com/jyauyo/spring-boot-computadoras.git', branch: "${params.BRANCH}"
+                //git url: "${env.REPO_GIT_APP}", branch: "${params.BRANCH}"
+                script {
+                    env.REPO_GIT_APP = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
+                    env.APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
+                    println env.REPO_GIT_APP
+                    println env.APP_VERSION
+                }
+                
             }
         }
         stage('Build') {
@@ -47,15 +51,21 @@ pipeline {
         }
 
         stage('Build Image') {
-            def jarName = sh(script: "ls target/*.jar | head -1", returnStdout: true).trim()
-            writeFile file: 'Dockerfile', text:"""
-                from eclipse-temurin:21-jre
-                copy ${jarName} /app/service.jar
-                ENTRYPOINT ["java", "-jar", "/app/service.jar"]
-            """
-            sh "docker build -t ${env.DOCKER_REGISTRY}/app-microservice:${env.APP_VERSION} ."
+            
+            
 
            steps {
+               script {
+
+                    def jarName = sh(script: "ls target/*.jar | head -1", returnStdout: true).trim()
+                    writeFile file: 'Dockerfile', text:"""
+                        from eclipse-temurin:21-jre
+                        copy ${jarName} /app/service.jar
+                        ENTRYPOINT ["java", "-jar", "/app/service.jar"]
+                    """
+                    sh "docker build -t ${env.DOCKER_REGISTRY}/app-microservice:${env.APP_VERSION} ."                   
+               }
+               
                 withDockerRegistry(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", url: "https://index.docker.io/v1/") {
                     sh "docker push ${env.DOCKER_REGISTRY}:${env.APP_VERSION}"
                 }
