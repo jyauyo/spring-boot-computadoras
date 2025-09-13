@@ -110,9 +110,8 @@ pipeline {
                
             }
         }
-    }
 
-     stage('Crear y Commitear') {
+        stage('Crear y Commitear') {
             steps {
                 script {
                     def newBranchName = "feature/${nroPase}"
@@ -138,6 +137,9 @@ pipeline {
                 }
             }
         }
+    }
+
+     
     
     post {
         success {
