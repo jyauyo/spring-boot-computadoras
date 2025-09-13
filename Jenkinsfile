@@ -34,6 +34,9 @@ pipeline {
                     APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
                     echo "***** Version: ${APP_VERSION}"
 
+                    def algo = scm.getUserRemoteConfigs()[0].getUrl()
+                    echo "*****JarName ${algo}"
+
                 }
                 
             }
@@ -64,10 +67,14 @@ pipeline {
                    sh "docker build -t ${env.DOCKER_REGISTRY}/${env.DOCKER_REGISTRY_ENVIRONMENT}/app-microservice:${APP_VERSION} ."                   
                }
                
-                withDockerRegistry(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", url: "${env.DOCKER_URL}") {
+               withCredentials([usernamePassword(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", usernameVariable: 'dockerHubUser', passwordVariable: 'dockerHubPassword')]){
+                //withDockerRegistry(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", url: "${env.DOCKER_URL}") {
                     //withCredentials([usernamePassword(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", passwordVariable: 'DOCKER_REGISTRY_PWD', usernameVariable: 'DOCKER_REGISTRY_USER')]) {
-                        sh "docker push ${env.DOCKER_REGISTRY}/${env.DOCKER_REGISTRY_ENVIRONMENT}/app-microservice:${APP_VERSION}"
+                   echo  "${env.dockerHubPassword} | login --username ${env.dockerHubUser} --password-stdin  ${env.DOCKER_URL}"
+                   
+                   sh "docker push ${env.DOCKER_REGISTRY}/${env.DOCKER_REGISTRY_ENVIRONMENT}/app-microservice:${APP_VERSION}"
                 }
+               
             }
                              
             //sh "docker push ${DOCKER_REGISTRY}/app-microservice:${env.APP_VERSION} "
