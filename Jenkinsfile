@@ -28,16 +28,18 @@ pipeline {
             
             steps {
 
-                def docker_registry_environment_ = ${env.DOCKER_REGISTRY_ENVIRONMENT}
+                
+                
+                checkout scm
+                
+                script {
+
+                    def docker_registry_environment_ = ${env.DOCKER_REGISTRY_ENVIRONMENT}
                    def DOCKER_REGISTRY_COMPLETE = "${env.DOCKER_REGISTRY}"
                    if (docker_registry_environment_ == null) {
                        DOCKER_REGISTRY_COMPLETE = "${DOCKER_REGISTRY_COMPLETE} / ${env.DOCKER_REGISTRY}"
                    }
                    println("***** ${DOCKER_REGISTRY_COMPLETE}");
-                
-                checkout scm
-                
-                script {
                     
                     APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
                     echo "***** Version: ${APP_VERSION}"
