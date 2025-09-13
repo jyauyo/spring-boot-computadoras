@@ -32,7 +32,7 @@ pipeline {
 
                 script {
                     def pom = readMavenPom file: 'pom.xml'
-                    echo "Project Version: ${pom.nroPase}"
+                    echo "Project Version: ${pom}"
                 }
                 
                 checkout scm
