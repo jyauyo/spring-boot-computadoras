@@ -22,10 +22,21 @@ pipeline {
     
     stages {
         stage('Checkout') {
-            checkout scm
+            
+
+            Jenkins.instance.getAllItems(hudson.model.AbstractProject.class).each {it -> 
+              scm = it.getScm()
+              if(scm instanceof hudson.plugins.git.GitSCM)
+              {
+                  env.repoGit = scm.getUserRemoteConfigs()[0].getUrl()
+                println env.repoGit
+              }
+            }
+            
             steps {
                 // Clonar el repositorio desde GitHub
                 //git url: 'https://github.com/jyauyo/spring-boot-computadoras.git', branch: "${params.BRANCH}"
+                git url: "${env.repoGit}", branch: "${params.BRANCH}"
                 env.APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
             }
         }
