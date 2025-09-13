@@ -55,7 +55,7 @@ pipeline {
                     //def pom = readMavenPom file: 'pom.xml'
 
                     // Access the version property
-                    def mavenVersion = "1.1.1"//pom.version
+                    def mavenVersion = "1.1.12"//pom.version
 
                     // Print the version to the console
                     echo "***** Maven Project Version: ${mavenVersion}"
@@ -75,6 +75,21 @@ pipeline {
                 
             }
         }
+
+
+        stage('Obtener versión Maven') {
+            steps {
+                script {
+                    // Obtiene la versión del pom.xml usando Maven
+                    APP_VERSION = sh(
+                        script: "mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec",
+                        returnStdout: true
+                    ).trim()
+                    echo "*********Versión Maven: ${MAVEN_VERSION}"
+                }
+            }
+        }
+        
         stage('Build') {
             steps {
                 // Compilar el proyecto usando Maven
