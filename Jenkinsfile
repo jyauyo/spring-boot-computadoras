@@ -41,21 +41,23 @@ pipeline {
                     def pom = readMavenPom file: 'pom.xml'
                     nroPase = pom.properties.nroPase
                     echo "***** NroPase: ${nroPase}"
-                    sh "pwd"
-                    sh "cd .."
-                    sh "pwd"
-                    sh "mkdir ${nroPase}"
-                    sh "pwd"
-                    sh "cd ${nroPase}"
-                    sh "pwd"
+
+
+                    sh """ 
+                    #!/bin/bash
+                    cd ..
+                    mkdir ${nroPase}
+                    cd ${nroPase}
+                    pwd
+                    """ 
+
                     withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                         sh 'git config --global user.email "jenkins@example.com"'
                         sh 'git config --global user.name "Jenkins"'
                         sh "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${projectName}.git"
-                        sh "git checkout -b ${env.BRANCH}"
-                        echo "rama clonada ${env.BRANCH}"
+                        sh "git checkout -b ${nroPase}"
+                        echo "rama clonada ${nroPase}"
 
-                        sh "cd ${projectName}"
                     }
                 }
                 
@@ -80,6 +82,14 @@ pipeline {
                     //sh "cd .."
                     //sh "mkdir clonacion"
                     //sh "cd clonacion"
+
+                    sh """ 
+                    #!/bin/bash
+                    cd ..
+                    mkdir ${nroPase}
+                    cd ${nroPase}
+                    pwd
+                    """ 
                     
                     withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                         sh 'git config --global user.email "jenkins@example.com"'
@@ -107,8 +117,6 @@ pipeline {
                         sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${projectName}.git origin ${newBranchName}"
 
                         //sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${projectNameGit} HEAD:main"
-                        sh "cd .."
-                        sh "cd ${projectName}"
                         
                     }                   
 
