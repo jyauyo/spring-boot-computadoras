@@ -37,7 +37,8 @@ pipeline {
                 //git url: "${env.REPO_GIT_APP}", branch: "${params.BRANCH}"
                 script {
 
-                    env.REPO_GIT_APP = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
+                    env.REPO_GIT_APP = "https://github.com/jyauyo/spring-boot-computadoras.git"
+                    //env.REPO_GIT_APP = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
                     echo "**** Repositorio GIT: ${env.REPO_GIT_APP}"
 
                     git url: "${env.REPO_GIT_APP}", branch: "${params.BRANCH}"
