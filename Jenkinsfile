@@ -24,14 +24,16 @@ pipeline {
         stage('Checkout') {
             
 
-            env.REPO_GIT_APP = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
-            println env.REPO_GIT_APP
+            ///env.REPO_GIT_APP = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
+            
             
             steps {
                 // Clonar el repositorio desde GitHub
+                env.REPO_GIT_APP = "https://github.com/jyauyo/spring-boot-computadoras.git"
                 //git url: 'https://github.com/jyauyo/spring-boot-computadoras.git', branch: "${params.BRANCH}"
                 git url: "${env.REPO_GIT_APP}", branch: "${params.BRANCH}"
                 env.APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
+                println env.REPO_GIT_APP
                 println env.APP_VERSION
             }
         }
