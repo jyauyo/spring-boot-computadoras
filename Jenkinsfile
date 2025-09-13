@@ -41,9 +41,15 @@ pipeline {
                     def pom = readMavenPom file: 'pom.xml'
                     nroPase = pom.properties.nroPase
                     echo "***** NroPase: ${nroPase}"
+
+                    withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                        sh 'git config --global user.email "jenkins@example.com"'
+                        sh 'git config --global user.name "Jenkins"'
+                        sh "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${projectName}.git"
+                    }
                 }
                 
-                checkout scm
+                //checkout scm                
                 
                 script {                    
                     
@@ -84,7 +90,7 @@ pipeline {
                         // Realiza el commit
                         sh "git commit -m \"${commitMessage}\""
 
-                        sh "argocd login 192.168.184.131:443 -u jyauyo -p ad --insecure"
+                        //sh "argocd login 192.168.184.131:443 --username jyauyo --password ad --insecure"
     
                         // Envía la nueva rama al repositorio remoto
                         sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${projectName}.git origin ${newBranchName}"
