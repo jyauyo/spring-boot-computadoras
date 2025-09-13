@@ -45,8 +45,9 @@ pipeline {
 
                     sh """ 
                     #!/bin/bash
+                    pwd
                     cd ..
-                    rm -r ${nroPase}
+                    rm -rf ${nroPase}
                     mkdir ${nroPase}
                     pwd
                     """
