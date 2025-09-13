@@ -46,6 +46,10 @@ pipeline {
                         sh 'git config --global user.email "jenkins@example.com"'
                         sh 'git config --global user.name "Jenkins"'
                         sh "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${projectName}.git"
+                        sh "git checkout -b ${env.BRANCH}"
+                        echo "rama clonada ${env.BRANCH}"
+
+                        sh "cd ${projectName}"
                     }
                 }
                 
@@ -65,7 +69,8 @@ pipeline {
             steps {
                 script {
                     def newBranchName = "feature/${nroPase}"
-                    def commitMessage = "Agrega la funcionalidad XYZ en la rama"                    
+                    def commitMessage = "Agrega la funcionalidad XYZ en la rama" 
+                    sh "pwd"
                     //sh "cd .."
                     //sh "mkdir clonacion"
                     //sh "cd clonacion"
