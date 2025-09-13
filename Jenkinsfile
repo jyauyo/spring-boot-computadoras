@@ -5,7 +5,6 @@ pipeline {
         DOCKER_REGISTRY = credentials('docker-registry') //"your_dockerhub_username/your_repository"
         DOCKER_CREDENTIALS_ID = "dockerhub-credentials"
         REPO_GIT_APP = ""
-        APP_VERSION = ""
     }
     //agent {
     //    docker {
@@ -59,12 +58,12 @@ pipeline {
 
                     // Print the version to the console
                     echo "***** Maven Project Version: ${mavenVersion}"
-                    env.APP_VERSION = mavenVersion
-                    echo "***** Version: ${env.APP_VERSION}"
+                    APP_VERSION = mavenVersion
+                    echo "***** Version: ${APP_VERSION}"
                     
                     //env.REPO_GIT_APP = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
-                    //env.APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
-                    //echo "***** Version: ${env.APP_VERSION}"
+                    APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
+                    echo "***** Version: ${APP_VERSION}"
 
                     //env.APP_VERSION = '1.1.1'
 
