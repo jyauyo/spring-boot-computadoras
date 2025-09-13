@@ -1,4 +1,5 @@
 def projectName
+def nroPase
 
 pipeline {
     agent any
@@ -36,7 +37,8 @@ pipeline {
                     echo("***** Project Name: ${projectName}");
                     
                     def pom = readMavenPom file: 'pom.xml'
-                    echo "***** NroPase: ${pom.properties.nroPase}"
+                    def nroPase = pom.properties.nroPase
+                    echo "***** NroPase: ${nroPase}"
                 }
                 
                 checkout scm
@@ -81,11 +83,12 @@ pipeline {
                    def docker_registry_environment_ = "${env.DOCKER_REGISTRY_ENVIRONMENT}"
                    def docker_registry_complete = "${env.DOCKER_REGISTRY}"
                    echo("***** Docker Registry Pre: ${docker_registry_environment_}");
-                   
+
+                   //es un misterio
                    if (docker_registry_environment_ != null 
                        && !docker_registry_environment_.isEmpty() 
                        && !docker_registry_environment_.equals("null")) {
-                       docker_registry_complete = "${docker_registry_complete}/${docker_registry_environment_}".trim()
+                       //docker_registry_complete = "${docker_registry_complete}/${docker_registry_environment_}".trim()
                    }
                    echo("***** Docker Registry Final: ${docker_registry_complete}");
                    
@@ -102,6 +105,8 @@ pipeline {
                }
                echo "***** Cleaning ..."
                sh 'mvn clean'
+
+               writeFile file: 'nroPase.txt', text:"""${nroPase}"""
                
             }
         }
