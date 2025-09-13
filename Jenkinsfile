@@ -41,7 +41,10 @@ pipeline {
                     def pom = readMavenPom file: 'pom.xml'
                     nroPase = pom.properties.nroPase
                     echo "***** NroPase: ${nroPase}"
-
+                    sh "cd .."
+                    sh "mkdir ${nroPase}"
+                    sh "cd ${nroPase}"
+                    
                     withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                         sh 'git config --global user.email "jenkins@example.com"'
                         sh 'git config --global user.name "Jenkins"'
@@ -101,8 +104,9 @@ pipeline {
                         sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${projectName}.git origin ${newBranchName}"
 
                         //sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${projectNameGit} HEAD:main"
-                        //sh "cd .."
-                        //sh "cd ${projectName}"
+                        sh "cd .."
+                        sh "cd ${projectName}"
+                        
                     }                   
 
                     echo "Rama '${newBranchName}' creada y cambios commiteados con éxito."
