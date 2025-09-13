@@ -29,6 +29,13 @@ pipeline {
         stage('Checkout') {
             
             steps {
+
+                script {
+                    def pom = readMavenPom file: 'pom.xml'
+                    echo "Project GroupId: ${pom.groupId}"
+                    echo "Project ArtifactId: ${pom.artifactId}"
+                    echo "Project Version: ${pom.version}"
+                }
                 
                 checkout scm
                 
@@ -74,7 +81,7 @@ pipeline {
                    echo("***** Docker Registry Pre: ${docker_registry_complete}");
                    
                    if (docker_registry_environment_ != null && !docker_registry_environment_.isEmpty()) {
-                       docker_registry_complete = "${docker_registry_complete}/${docker_registry_environment_}".trim()
+                       //docker_registry_complete = "${docker_registry_complete}/${docker_registry_environment_}".trim()
                    }
                    echo("***** Docker Registry Final: ${docker_registry_complete}");
                    
