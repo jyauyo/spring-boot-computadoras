@@ -55,8 +55,8 @@ pipeline {
                             sh 'git config --global user.email "jenkins@example.com"'
                             sh 'git config --global user.name "Jenkins"'
                             sh "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${projectName}.git"
-                            sh "git checkout -b ${nroPase}"
-                            echo "rama clonada ${nroPase}"    
+                            sh "git checkout -b ${BRANCH}"
+                            echo "rama clonada ${BRANCH}"    
                         }
                     }
                 }
@@ -81,15 +81,7 @@ pipeline {
                     sh "pwd"
                     //sh "cd .."
                     //sh "mkdir clonacion"
-                    //sh "cd clonacion"
-
-                    sh """ 
-                    #!/bin/bash
-                    cd ..
-                    mkdir ${nroPase}
-                    cd ${nroPase}
-                    pwd
-                    """ 
+                    //sh "cd clonacion"                   
                     
                     withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                         sh 'git config --global user.email "jenkins@example.com"'
