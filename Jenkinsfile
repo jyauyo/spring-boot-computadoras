@@ -6,7 +6,7 @@ pipeline {
     //    JAVA_TOOL_OPTIONS = "-Duser.home=/home/jenkins"
         //DOCKER_REGISTRY = credentials('docker-registry') //"your_dockerhub_username/your_repository"
         DOCKER_REGISTRY = "jyauyor"
-        DOKER_URL = "https://index.docker.io/v1/"
+        DOCKER_URL = "https://index.docker.io/v1/"
         DOCKER_CREDENTIALS_ID = "dockerhub-credentials"
         DOCKER_REGISTRY_ENVIRONMENT = ""
     }
@@ -71,10 +71,12 @@ pipeline {
                    
                    def docker_registry_environment_ = "${env.DOCKER_REGISTRY_ENVIRONMENT}"
                    def docker_registry_complete = "${env.DOCKER_REGISTRY}"
+                   echo("***** Docker Registry Pre: ${docker_registry_complete}");
+                   
                    if (docker_registry_environment_ != null && !docker_registry_environment_.isEmpty()) {
                        docker_registry_complete = "${docker_registry_complete}/${docker_registry_environment_}".trim()
                    }
-                   echo("***** Docker Registry: ${docker_registry_complete}");
+                   echo("***** Docker Registry Final: ${docker_registry_complete}");
                    
                    def dockerfile = 'Dockerfile'
                    def customImage = docker.build("${docker_registry_complete}/${projectName}:${APP_VERSION}", "-f ${dockerfile} .")
