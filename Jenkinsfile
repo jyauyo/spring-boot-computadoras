@@ -55,16 +55,19 @@ pipeline {
             }
         }
 
-                stage('Crear y Commitear') {
+        stage('Crear y Commitear') {
             steps {
                 script {
                     def newBranchName = "feature/${nroPase}"
                     def commitMessage = "Agrega la funcionalidad XYZ en la rama"                    
+                    sh "cd .."
+                    sh "mkdir clonacion"
+                    sh "cd clonacion"
                     
                     withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                         sh 'git config --global user.email "jenkins@example.com"'
                         sh 'git config --global user.name "Jenkins"'
-                        //sh 'git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/your-org/your-repo.git'
+                        sh 'git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${projectName}.git'
                         // Or use the git step directly:
                         // git branch: 'main', credentialsId: 'your-credential-id', url: 'https://github.com/your-org/your-repo.git'
 
@@ -85,7 +88,8 @@ pipeline {
                         sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${projectName}.git origin ${newBranchName}"
 
                         //sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${projectNameGit} HEAD:main"
-                        
+                        sh "cd .."
+                        sh "cd ${projectName}"
                     }                   
 
                     echo "Rama '${newBranchName}' creada y cambios commiteados con éxito."
@@ -95,6 +99,8 @@ pipeline {
         
         stage('Build') {
             steps {
+                sh "echo ************* Build ***************"
+                sh "pwd"
                 // Compilar el proyecto usando Maven
                 sh 'mvn clean install'
             }
