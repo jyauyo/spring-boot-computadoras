@@ -1,5 +1,6 @@
 def projectName
 def nroPase
+def projectNameGit
 
 pipeline {
     agent any
@@ -33,7 +34,7 @@ pipeline {
             steps {
 
                 script {
-
+                    projectNameGit = scm.getUserRemoteConfigs()[0].getUrl()
                     projectName = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
                     echo("***** Project Name: ${projectName}");
                     
@@ -81,7 +82,9 @@ pipeline {
                         sh "git commit -m \"${commitMessage}\""
     
                         // Envía la nueva rama al repositorio remoto
-                        sh "git push origin ${newBranchName}"
+                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${projectNameGit} origin ${newBranchName}"
+
+                        //sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${projectNameGit} HEAD:main"
                         
                     }                   
 
