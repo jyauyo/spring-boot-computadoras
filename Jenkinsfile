@@ -60,7 +60,7 @@ pipeline {
                     def newBranchName = "feature/${nroPase}"
                     def commitMessage = "Agrega la funcionalidad XYZ en la rama"                    
                     
-                    withCredentials([usernamePassword(credentialsId: "${GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                    withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                         sh 'git config --global user.email "jenkins@example.com"'
                         sh 'git config --global user.name "Jenkins"'
                         //sh 'git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/your-org/your-repo.git'
