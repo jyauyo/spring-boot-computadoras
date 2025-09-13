@@ -44,7 +44,7 @@ pipeline {
 
                 
                 
-                script {
+                //script {
                     //def urlRepoGit = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
                     //env.REPO_GIT_APP = urlRepoGit
                     //env.REPO_GIT_APP = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
@@ -71,7 +71,7 @@ pipeline {
                     //echo "***** Version: ${env.APP_VERSION}"
                     //println env.REPO_GIT_APP
                     //println env.APP_VERSION
-                }
+                //}
                 
             }
         }
