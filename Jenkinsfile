@@ -57,8 +57,12 @@ pipeline {
                             sh 'git config --global user.email "jenkins@example.com"'
                             sh 'git config --global user.name "Jenkins"'
                             sh "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${projectName}.git"
-                            sh "git checkout ${BRANCH}"
-                            echo "rama clonada ${BRANCH}"    
+                            
+                            dir("${projectName}") {
+                                sh "git checkout ${BRANCH}"
+                                sh "git pull"
+                                echo "rama clonada ${BRANCH}"
+                            }
                         }
                     }
                 }
@@ -84,37 +88,38 @@ pipeline {
                     //sh "cd .."
                     //sh "mkdir clonacion"
                     //sh "cd clonacion"                   
-                    
-                    withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-                        sh 'git config --global user.email "jenkins@example.com"'
-                        sh 'git config --global user.name "Jenkins"'
-                        //sh "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${projectName}.git"
-                        // Or use the git step directly:
-                        // git branch: 'main', credentialsId: 'your-credential-id', url: 'https://github.com/your-org/your-repo.git'
-
-                        // Crea una nueva rama y cambia a ella
-                        sh "git checkout -b ${newBranchName}"
-    
-                        // Simula la creación o modificación de archivos
-                        // Reemplaza esto con las acciones que necesites para modificar tus archivos
-                        sh "echo 'Contenido del nuevo archivo' > nuevo_archivo.txt"
-    
-                        // Agrega los cambios
-                        sh "git add ."
-    
-                        // Realiza el commit
-                        sh "git commit -m \"${commitMessage}\""
-
-                        //sh "argocd login 192.168.184.131:443 --username jyauyo --password ad --insecure"
-    
-                        // Envía la nueva rama al repositorio remoto
-                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${projectName}.git origin ${newBranchName}"
-
-                        //sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${projectNameGit} HEAD:main"
-                        
-                    }                   
-
-                    echo "Rama '${newBranchName}' creada y cambios commiteados con éxito."
+                    dir("../${nroPase}") {
+                        dir("${projectName}") {
+                            withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                                sh 'git config --global user.email "jenkins@example.com"'
+                                sh 'git config --global user.name "Jenkins"'
+                                //sh "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${projectName}.git"
+                                // Or use the git step directly:
+                                // git branch: 'main', credentialsId: 'your-credential-id', url: 'https://github.com/your-org/your-repo.git'
+        
+                                // Crea una nueva rama y cambia a ella
+                                sh "git checkout -b ${newBranchName}"
+            
+                                // Simula la creación o modificación de archivos
+                                // Reemplaza esto con las acciones que necesites para modificar tus archivos
+                                sh "echo 'Contenido del nuevo archivo' > nuevo_archivo.txt"
+            
+                                // Agrega los cambios
+                                sh "git add ."
+            
+                                // Realiza el commit
+                                sh "git commit -m \"${commitMessage}\""
+        
+                                //sh "argocd login 192.168.184.131:443 --username jyauyo --password ad --insecure"
+            
+                                // Envía la nueva rama al repositorio remoto
+                                sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${projectName}.git origin ${newBranchName}"
+        
+                                //sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${projectNameGit} HEAD:main"
+                                echo "Rama '${newBranchName}' creada y cambios commiteados con éxito."
+                            }
+                        }
+                    }                    
                 }
             }
         }
