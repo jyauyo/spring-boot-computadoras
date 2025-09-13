@@ -46,10 +46,11 @@ pipeline {
                     sh """ 
                     #!/bin/bash
                     cd ..
+                    rm -r ${nroPase}
                     mkdir ${nroPase}
-                    cd ${nroPase}
                     pwd
-                    """ 
+                    """
+                    
                     dir("../${nroPase}") {
                         withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                             sh 'git config --global user.email "jenkins@example.com"'
