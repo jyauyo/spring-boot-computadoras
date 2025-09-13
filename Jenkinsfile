@@ -86,7 +86,7 @@ pipeline {
 
            steps {
                script {
-
+                   sh "pwd"
                    def jarName = sh(script: "ls target/*.jar | head -1", returnStdout: true).trim()
                    echo "*****JarName ${jarName}"
                     writeFile file: 'Dockerfile', text:"""
@@ -94,9 +94,9 @@ pipeline {
                         copy ${jarName} /app/service.jar
                         ENTRYPOINT ["java", "-jar", "/app/service.jar"]
                     """
-                   sh "pwd"
+                   
                    sh "ls -ltr"
-                    sh "docker build -t ${env.DOCKER_REGISTRY}/app-microservice:1.1.1 ."                   
+                   sh "docker build -t ${env.DOCKER_REGISTRY}/app-microservice:1.1.1 ."                   
                }
                
                 withDockerRegistry(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", url: "https://index.docker.io/v1/") {
