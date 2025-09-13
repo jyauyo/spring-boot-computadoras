@@ -37,7 +37,7 @@ pipeline {
         }
 
         stage('Build Image') {
-            def jarName = sh(script: "ls target/*.jar" | head -1", returnStdout: true).trim()
+            def jarName = sh(script: "ls target/*.jar | head -1", returnStdout: true).trim()
             writeFile file: 'Dockerfile', text:"""
                 from eclipse-temurin:21-jre
                 copy ${jarName} /app/service.jar
