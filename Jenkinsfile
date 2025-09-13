@@ -52,8 +52,7 @@ pipeline {
                    def jarName = sh(script: "ls target/*.jar | head -1", returnStdout: true).trim()
                    echo "*****JarName ${jarName}"
                     writeFile file: 'Dockerfile', text:"""
-                    FROM openjdk:21-jdk-alpine
-                    MAINTAINER jyauyo@outlook.com.pe
+                    FROM eclipse-temurin:21-jdk-alpine
                     ADD ${jarName} /app/service.jar
                     WORKDIR /app
                     ENTRYPOINT ["java", "-jar", "/app/service.jar"]
