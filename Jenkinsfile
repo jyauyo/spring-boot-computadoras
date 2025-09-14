@@ -1,3 +1,7 @@
+@Library("my-shared-library") _
+
+var utils = new helloWorld()
+
 def projectName
 def nroPase
 def projectNameGit
@@ -30,7 +34,7 @@ pipeline {
     
     stages {
         stage('Checkout') {
-            
+            utils.call2()
             steps {
 
                 script {
