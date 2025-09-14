@@ -1,5 +1,5 @@
-@Library("my-shared-library@develop") _
-import DockerJenkinUtils
+@Library("my-shared-library@develop")
+import sharedlib.DockerJenkinUtils
 def utilsDocker = new DockerJenkinUtils(this)
 
 def projectName
