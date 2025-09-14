@@ -77,7 +77,7 @@ pipeline {
                     
                     APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
                     echo "***** Version: ${APP_VERSION}"
-                    utilsDocker.build(projectName: "${projectName}", version: "${APP_VERSION}", jarName: "jesus.jar")
+                    
                 }
                 
             }
@@ -153,7 +153,8 @@ pipeline {
 
            steps {
                script {
-
+                   utilsDocker.build(projectName: "${projectName}", version: "${APP_VERSION}")
+                   /*
                    def jarName = sh(script: "ls target/*.jar | head -1", returnStdout: true).trim()
                    echo "***** JarName ${jarName}"
 
@@ -164,10 +165,6 @@ pipeline {
                    WORKDIR /app
                    ENTRYPOINT ["java", "-jar", "/app/service.jar"]
                    """
-
-                   //sh "docker build -t ${env.DOCKER_REGISTRY}${env.DOCKER_REGISTRY_ENVIRONMENT}/app-microservice:${APP_VERSION} ."
-                   //def projectName = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
-                   //echo("***** Project Name: ${projectName}");
                    
                    def docker_registry_environment_ = "${env.DOCKER_REGISTRY_ENVIRONMENT}"
                    def docker_registry_complete = "${env.DOCKER_REGISTRY}"
@@ -185,12 +182,13 @@ pipeline {
                    def customImage = docker.build("${docker_registry_complete}/${projectName}:${APP_VERSION}", "-f ${dockerfile} .")
 
                    withCredentials([usernamePassword(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", usernameVariable: 'dockerHubUser', passwordVariable: 'dockerHubPassword')]){
-                    //withDockerRegistry(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", url: "${env.DOCKER_URL}") {
+                    
                        echo  "${env.dockerHubPassword} | login --username ${env.dockerHubUser} --password-stdin  ${env.DOCKER_URL}"                   
-                       //sh "docker push ${env.DOCKER_REGISTRY}${env.DOCKER_REGISTRY_ENVIRONMENT}/app-microservice:${APP_VERSION}"
+                       
                    }
                    echo "***** Publishing to Docker Registry: ${APP_VERSION}"
                    customImage.push()
+                   */
                }
                echo "***** Cleaning ..."
                sh 'mvn clean'
