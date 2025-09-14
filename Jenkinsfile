@@ -151,11 +151,10 @@ pipeline {
 
         stage('Build Image') {
         
-           steps {
-               utilsDocker.build(projectName: "${projectName}", version: "${APP_VERSION}")
-               /*script {
-                   
-                   
+           steps {               
+               script {
+                   utilsDocker.build(projectName: "${projectName}", version: "${APP_VERSION}")
+                   /*
                    def jarName = sh(script: "ls target/*.jar | head -1", returnStdout: true).trim()
                    echo "***** JarName ${jarName}"
 
@@ -189,8 +188,8 @@ pipeline {
                    }
                    echo "***** Publishing to Docker Registry: ${APP_VERSION}"
                    customImage.push()
-                   
-               }*/
+                   */
+               }
                echo "***** Cleaning ..."
                sh 'mvn clean'
 
