@@ -165,7 +165,7 @@ pipeline {
             }
             steps {
                 script {
-                    //sh "argocd login 192.168.184.131:443 --username jyauyo --password ad --insecure"
+                    sh "argocd login 192.168.184.131:443 --username jyauyo --password ad --insecure"
                 }
             }
         }
