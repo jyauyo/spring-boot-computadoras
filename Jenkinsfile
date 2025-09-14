@@ -80,6 +80,9 @@ pipeline {
         }
 
         stage('Crear y Commitear') {
+            when {
+                expression { false }
+            }
             steps {
                 script {
                     def newBranchName = "feature/${nroPase}"
