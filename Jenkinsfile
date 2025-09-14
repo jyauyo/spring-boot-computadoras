@@ -1,6 +1,6 @@
-@Library("my-shared-library") _
+@Library("my-shared-library@develop") _
 
-var utils = new helloWorld()
+def utilsDocker = new Docker()
 
 def projectName
 def nroPase
@@ -34,7 +34,7 @@ pipeline {
     
     stages {
         stage('Checkout') {
-            utils.call2()
+            
             steps {
 
                 script {
@@ -79,7 +79,7 @@ pipeline {
                     echo "***** Version: ${APP_VERSION}"
 
                 }
-                
+                utils.utilsDocker(projectName: "${projectName}", version: "${APP_VERSION}")
             }
         }
 
