@@ -78,7 +78,7 @@ pipeline {
             }
         }
 
-        stage('Clonacion Para YAML') {
+        stage('Clonacion Update YAML') {
             when {
                 expression { false }
             }
@@ -144,7 +144,7 @@ pipeline {
                            git commit -m "Updated Deployment Manifest" -m "nroPase: ${nroPase}"
                             """
         
-                                //sh "argocd login 192.168.184.131:443 --username jyauyo --password ad --insecure"
+                                
                             //withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                             //withCredentials([gitUsernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", gitToolName: 'Default')]) {
                                 // Envía la nueva rama al repositorio remoto
@@ -158,7 +158,17 @@ pipeline {
                 }
             }
         }
-        
+
+        stage('Sync with ArgoCD') {
+            when {
+                expression { false }
+            }
+            steps {
+                script {
+                    //sh "argocd login 192.168.184.131:443 --username jyauyo --password ad --insecure"
+                }
+            }
+        }
 
     }     
     
