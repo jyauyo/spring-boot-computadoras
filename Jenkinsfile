@@ -77,9 +77,9 @@ pipeline {
                     
                     APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
                     echo "***** Version: ${APP_VERSION}"
-
+                    utils.utilsDocker(projectName: "${projectName}", version: "${APP_VERSION}")
                 }
-                utils.utilsDocker(projectName: "${projectName}", version: "${APP_VERSION}")
+                
             }
         }
 
