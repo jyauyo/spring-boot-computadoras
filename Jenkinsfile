@@ -33,20 +33,58 @@ pipeline {
     }
     
     stages {
-        stage('Clonacion Para YAML') {
+        stage('Prepare') {
             
             steps {
-
+                
+                //checkout scm                
+                
                 script {
-                    //projectNameGit = scm.getUserRemoteConfigs()[0].getUrl()
+
                     projectName = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
                     echo("***** Project Name: ${projectName}");
                     
                     def pom = readMavenPom file: 'pom.xml'
                     nroPase = pom.properties.nroPase
                     echo "***** NroPase: ${nroPase}"
+                    
+                    APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
+                    echo "***** Version: ${APP_VERSION}"
+                    
+                }
+                
+            }
+        }
 
+        stage('Build') {
+            steps {
+                sh "echo ************* Build ***************"
+                sh "pwd"
+                // Compilar el proyecto usando Maven
+                sh 'mvn clean install'
+            }
+        }
 
+        stage('Build Image') {
+        
+           steps {               
+               script {
+                   utilsDocker.build(projectName: "${projectName}", version: "${APP_VERSION}")
+               }
+               echo "***** Cleaning ..."
+               sh 'mvn clean'
+
+               writeFile file: 'nroPase.txt', text:"""${nroPase}"""               
+            }
+        }
+
+        stage('Clonacion Para YAML') {
+            when {
+                expression { false }
+            }
+            steps {
+                script {
+                    //projectNameGit = scm.getUserRemoteConfigs()[0].getUrl()
                     sh """ 
                     #!/bin/bash
                     pwd
@@ -69,26 +107,7 @@ pipeline {
                             }
                         }
                     }
-                }
-                
-                //checkout scm                
-                
-                script {                    
-                    
-                    APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
-                    echo "***** Version: ${APP_VERSION}"
-                    
-                }
-                
-            }
-        }
 
-        stage('Crear y Commitear') {
-            when {
-                expression { false }
-            }
-            steps {
-                script {
                     def newBranchName = "feature/${nroPase}"
                     def commitMessage = "Agrega la funcionalidad XYZ en la rama" 
                     sh "pwd"
@@ -140,27 +159,7 @@ pipeline {
             }
         }
         
-        stage('Build') {
-            steps {
-                sh "echo ************* Build ***************"
-                sh "pwd"
-                // Compilar el proyecto usando Maven
-                sh 'mvn clean install'
-            }
-        }
 
-        stage('Build Image') {
-        
-           steps {               
-               script {
-                   utilsDocker.build(projectName: "${projectName}", version: "${APP_VERSION}")
-               }
-               echo "***** Cleaning ..."
-               sh 'mvn clean'
-
-               writeFile file: 'nroPase.txt', text:"""${nroPase}"""               
-            }
-        }
     }     
     
     post {
