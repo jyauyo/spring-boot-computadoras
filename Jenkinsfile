@@ -90,7 +90,7 @@ pipeline {
                     //sh "cd clonacion"                   
                     dir("../${nroPase}") {
                         dir("${projectName}") {
-                            withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                            
                                 sh 'git config --global user.email "jenkins@examples.com"'
                                 sh 'git config --global user.name "Jenkinss"'
                                 //sh "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${projectName}.git"
@@ -111,9 +111,10 @@ pipeline {
                                 sh "git commit -m \"${commitMessage}\""
         
                                 //sh "argocd login 192.168.184.131:443 --username jyauyo --password ad --insecure"
-            
+                            //withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                            withCredentials([gitUsernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", gitToolName: 'Default')]) {
                                 // Envía la nueva rama al repositorio remoto
-                                sh "git push --set-upstream origin ${newBranchName}"
+                                sh "git push  https://github.com/jyauyo/${projectName}.git --set-upstream origin ${newBranchName}"
         
                                 //sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${projectNameGit} HEAD:main"
                                 echo "Rama '${newBranchName}' creada y cambios commiteados con éxito."
