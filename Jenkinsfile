@@ -1,6 +1,6 @@
 @Library("my-shared-library@develop") _
-
-def utilsDocker = new Docker()
+import sharedlib.Docker
+def utilsDocker = new Docker(this)
 
 def projectName
 def nroPase
