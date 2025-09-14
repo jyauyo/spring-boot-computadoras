@@ -1,6 +1,6 @@
 @Library("my-shared-library@develop") _
-import sharedlib.Docker
-def utilsDocker = new Docker(this)
+import sharedlib.DockerJenkinUtils
+def utilsDocker = new DockerJenkinUtils(this)
 
 def projectName
 def nroPase
@@ -77,7 +77,7 @@ pipeline {
                     
                     APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
                     echo "***** Version: ${APP_VERSION}"
-                    utilsDocker.utilsDocker(projectName: "${projectName}", version: "${APP_VERSION}")
+                    utilsDocker.build(projectName: "${projectName}", version: "${APP_VERSION}")
                 }
                 
             }
