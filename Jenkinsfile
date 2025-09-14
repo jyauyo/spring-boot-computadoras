@@ -154,54 +154,14 @@ pipeline {
            steps {               
                script {
                    utilsDocker.build(projectName: "${projectName}", version: "${APP_VERSION}")
-                   /*
-                   def jarName = sh(script: "ls target/*.jar | head -1", returnStdout: true).trim()
-                   echo "***** JarName ${jarName}"
-
-                   echo "***** Creating Dockerfile"
-                   writeFile file: 'Dockerfile', text:"""
-                   FROM eclipse-temurin:21-jdk-alpine
-                   ADD ${jarName} /app/service.jar
-                   WORKDIR /app
-                   ENTRYPOINT ["java", "-jar", "/app/service.jar"]
-                   """
-                   
-                   def docker_registry_environment_ = "${env.DOCKER_REGISTRY_ENVIRONMENT}"
-                   def docker_registry_complete = "${env.DOCKER_REGISTRY}"
-                   echo("***** Docker Registry Pre: ${docker_registry_environment_}");
-
-                   //es un misterio
-                   if (docker_registry_environment_ != null 
-                       && !docker_registry_environment_.isEmpty() 
-                       && !docker_registry_environment_.equals("null")) {
-                       //docker_registry_complete = "${docker_registry_complete}/${docker_registry_environment_}".trim()
-                   }
-                   echo("***** Docker Registry Final: ${docker_registry_complete}");
-                   
-                   def dockerfile = 'Dockerfile'
-                   def customImage = docker.build("${docker_registry_complete}/${projectName}:${APP_VERSION}", "-f ${dockerfile} .")
-
-                   withCredentials([usernamePassword(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", usernameVariable: 'dockerHubUser', passwordVariable: 'dockerHubPassword')]){
-                    
-                       echo  "${env.dockerHubPassword} | login --username ${env.dockerHubUser} --password-stdin  ${env.DOCKER_URL}"                   
-                       
-                   }
-                   echo "***** Publishing to Docker Registry: ${APP_VERSION}"
-                   customImage.push()
-                   */
                }
                echo "***** Cleaning ..."
                sh 'mvn clean'
 
-               writeFile file: 'nroPase.txt', text:"""${nroPase}"""
-               
+               writeFile file: 'nroPase.txt', text:"""${nroPase}"""               
             }
         }
-
-
-    }
-
-     
+    }     
     
     post {
         success {
