@@ -33,7 +33,7 @@ pipeline {
     }
     
     stages {
-        stage('Checkout') {
+        stage('Clonacion Para YAML') {
             
             steps {
 
