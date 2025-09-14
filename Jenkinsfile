@@ -56,7 +56,7 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                             sh 'git config --global user.email "jenkins@example.com"'
                             sh 'git config --global user.name "Jenkins"'
-                            sh "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${projectName}.git"
+                            !echo "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${projectName}.git"
                             
                             dir("${projectName}") {
                                 sh "git checkout ${BRANCH}"
@@ -113,7 +113,7 @@ pipeline {
                                 //sh "argocd login 192.168.184.131:443 --username jyauyo --password ad --insecure"
             
                                 // Envía la nueva rama al repositorio remoto
-                                sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${projectName}.git origin ${newBranchName}"
+                                sh "git push https://${GIT_USERNAME}:Fabiano2387@github.com/jyauyo/${projectName}.git origin ${newBranchName}"
         
                                 //sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${projectNameGit} HEAD:main"
                                 echo "Rama '${newBranchName}' creada y cambios commiteados con éxito."
