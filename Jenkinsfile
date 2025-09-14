@@ -113,7 +113,7 @@ pipeline {
                                 //sh "argocd login 192.168.184.131:443 --username jyauyo --password ad --insecure"
             
                                 // Envía la nueva rama al repositorio remoto
-                                sh "git push https://${GIT_USERNAME}:Fabiano2387@github.com/jyauyo/${projectName}.git origin ${newBranchName}"
+                                sh "git push --set-upstream origin ${newBranchName}"
         
                                 //sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${projectNameGit} HEAD:main"
                                 echo "Rama '${newBranchName}' creada y cambios commiteados con éxito."
