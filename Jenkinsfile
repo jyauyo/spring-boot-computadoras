@@ -10,7 +10,7 @@ pipeline {
         DOCKER_REGISTRY = "jyauyor"
         DOCKER_URL = "https://index.docker.io/v1/"
         DOCKER_CREDENTIALS_ID = "dockerhub-credentials"
-        GITHUB_CREDENTIALS_ID = "github-credentials"
+        GITHUB_CREDENTIALS_ID = "github-credentials-jyauyo"
         DOCKER_REGISTRY_ENVIRONMENT = ""
     }
     //agent {
