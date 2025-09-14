@@ -150,8 +150,9 @@ pipeline {
         }
 
         stage('Build Image') {
-        utilsDocker.build(projectName: "${projectName}", version: "${APP_VERSION}")
+        
            steps {
+               utilsDocker.build(projectName: "${projectName}", version: "${APP_VERSION}")
                /*script {
                    
                    
