@@ -175,8 +175,8 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: "${env.ARGOCD_CREDENTIALS_ID}", usernameVariable: 'ARGOCD_USERNAME', passwordVariable: 'ARGOCD_PASSWORD')]) {
-                        sh "argocd login 192.168.18.34:31707 --username admin --password jesusangel --insecure"
-                        sh "argocd app patch sistema-solar --patch '{"metadata":{"labels":{"paseNro":"PAS20241U2101000096"}}}' --type merge"
+                        sh "argocd login 192.168.18.34:31707 --username ${env.ARGOCD_USERNAME} --password jesusangel --insecure"
+                        sh "argocd app patch sistema-solar --patch '{\"metadata\":{\"labels\":{\"paseNro\":\"PAS20241U2101000096\"}}}' --type merge"
                     }
                 }
             }
