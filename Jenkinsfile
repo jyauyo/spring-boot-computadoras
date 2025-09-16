@@ -15,7 +15,6 @@ pipeline {
         DOCKER_URL = "https://index.docker.io/v1/"
         DOCKER_CREDENTIALS_ID = "dockerhub-credentials"
         GITHUB_CREDENTIALS_ID = "github-credentials-jyauyo"
-        ARGOCD_HOST = "ARGOCD_HOST"
         ARGOCD_CREDENTIALS_ID = "argocd-credentials"
         DOCKER_REGISTRY_ENVIRONMENT = ""
     }
