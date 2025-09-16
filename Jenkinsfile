@@ -15,6 +15,7 @@ pipeline {
         DOCKER_URL = "https://index.docker.io/v1/"
         DOCKER_CREDENTIALS_ID = "dockerhub-credentials"
         GITHUB_CREDENTIALS_ID = "github-credentials-jyauyo"
+        ARGOCD_HOST = "ARGOCD_HOST"
         ARGOCD_CREDENTIALS_ID = "argocd-credentials"
         DOCKER_REGISTRY_ENVIRONMENT = ""
     }
@@ -35,9 +36,6 @@ pipeline {
     
     stages {
         stage('Prepare') {
-            when {
-                expression { false }
-            }
             
             steps {
                 
@@ -175,10 +173,10 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: "${env.ARGOCD_CREDENTIALS_ID}", usernameVariable: 'ARGOCD_USERNAME', passwordVariable: 'ARGOCD_PASSWORD')]) {
-                        sh "argocd login 192.168.18.34:31707 --username ${env.ARGOCD_USERNAME} --password ${env.ARGOCD_PASSWORD} --insecure"
+                        sh "argocd login ${ARGOCD_HOST} --username ${env.ARGOCD_USERNAME} --password ${env.ARGOCD_PASSWORD} --insecure"
                         sh "argocd app set sistema-solar --sync-policy none;"
                         sh "argocd app set sistema-solar --revision ${BRANCH} --grpc-web;"
-                        sh "argocd app sync sistema-solar;"
+                        sh "argocd app sync sistema-solar --sync-policy automated;"
                         sh "argocd app patch sistema-solar --patch '{\"metadata\":{\"labels\":{\"paseNro\":\"${nroPase}\"}}}' --type merge"
                     }
                 }
