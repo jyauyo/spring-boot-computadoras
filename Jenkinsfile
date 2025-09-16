@@ -173,9 +173,10 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: "${env.ARGOCD_CREDENTIALS_ID}", usernameVariable: 'ARGOCD_USERNAME', passwordVariable: 'ARGOCD_PASSWORD')]) {
                         sh "argocd login ${ARGOCD_HOST} --username ${env.ARGOCD_USERNAME} --password ${env.ARGOCD_PASSWORD} --insecure"
-                        sh "argocd app set sistema-solar --sync-policy none;"
+                        sh "argocd app set sistema-solar --sync-policy none --grpc-web;"
                         sh "argocd app set sistema-solar --revision ${BRANCH} --grpc-web;"
-                        sh "argocd app sync sistema-solar --sync-policy automated;"
+                        sh "argocd app set sistema-solar --sync-policy automated --grpc-web;"
+                        sh "argocd app sync sistema-solar"
                         sh "argocd app patch sistema-solar --patch '{\"metadata\":{\"labels\":{\"paseNro\":\"${nroPase}\"}}}' --type merge"
                     }
                 }
