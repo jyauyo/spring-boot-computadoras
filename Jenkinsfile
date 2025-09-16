@@ -15,6 +15,7 @@ pipeline {
         DOCKER_URL = "https://index.docker.io/v1/"
         DOCKER_CREDENTIALS_ID = "dockerhub-credentials"
         GITHUB_CREDENTIALS_ID = "github-credentials-jyauyo"
+        ARGOCD_CREDENTIALS_ID = "argocd-credentials"
         DOCKER_REGISTRY_ENVIRONMENT = ""
     }
     //agent {
@@ -34,6 +35,9 @@ pipeline {
     
     stages {
         stage('Prepare') {
+            when {
+                expression { false }
+            }
             
             steps {
                 
@@ -57,6 +61,9 @@ pipeline {
         }
 
         stage('Build') {
+            when {
+                expression { false }
+            }
             steps {
                 sh "echo ************* Build ***************"
                 sh "pwd"
@@ -66,7 +73,9 @@ pipeline {
         }
 
         stage('Build Image') {
-        
+            when {
+                expression { false }
+            }
            steps {               
                script {
                    utilsDocker.build(projectName: "${projectName}", version: "${APP_VERSION}")
@@ -160,12 +169,14 @@ pipeline {
         }
 
         stage('Sync with ArgoCD') {
-            when {
-                expression { false }
-            }
+            //when {
+            //    expression { false }
+            //}
             steps {
                 script {
-                    sh "argocd login 192.168.184.131:443 --username jyauyo --password ad --insecure"
+                    withCredentials([usernamePassword(credentialsId: "${env.ARGOCD_CREDENTIALS_ID}", usernameVariable: 'ARGOCD_USERNAME', passwordVariable: 'ARGOCD_PASSWORD')]) {
+                        sh "argocd login 192.168.18.34:443 --username ${env.usernameVariable} --password ${env.passwordVariable} --insecure"
+                    }
                 }
             }
         }
