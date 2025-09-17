@@ -2,7 +2,7 @@
 //import sharedlib.DockerJenkinsUtils
 import sharedlib.GitOpsJenkinsUtils
 //def utilsDocker = new DockerJenkinUtils(this)
-def utilsDocker = new GitOpsJenkinsUtils(this)
+def utilsGitOps = new GitOpsJenkinsUtils(this)
 
 def projectName
 def nroPase
@@ -77,7 +77,7 @@ pipeline {
             }
            steps {               
                script {
-                   utilsDocker.buildAndPushImage(projectName: "${projectName}", version: "${APP_VERSION}")
+                   utilsGitOps.buildAndPushImage(projectName: "${projectName}", version: "${APP_VERSION}")
                }
                echo "***** Cleaning ..."
                sh 'mvn clean'
@@ -173,7 +173,7 @@ pipeline {
             //}
             steps {
                 script {
-                    utilsDocker.syncWithArgoCd(projectName: "${projectName}", version: "${APP_VERSION}", nroPase: "${nroPase}", branch: "${BRANCH}")
+                    utilsGitOps.syncWithArgoCd(projectName: "${projectName}", version: "${APP_VERSION}", nroPase: "${nroPase}", branch: "${BRANCH}")
                     /*withCredentials([usernamePassword(credentialsId: "${env.ARGOCD_CREDENTIALS_ID}", usernameVariable: 'ARGOCD_USERNAME', passwordVariable: 'ARGOCD_PASSWORD')]) {
                         sh "argocd login ${ARGOCD_HOST} --username ${env.ARGOCD_USERNAME} --password ${env.ARGOCD_PASSWORD} --insecure"
                         sh "argocd app set sistema-solar --sync-policy none --grpc-web;"
