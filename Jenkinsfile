@@ -43,8 +43,8 @@ pipeline {
                 //checkout scm                
                 
                 script {
-
-                    projectName = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
+                    utilsGitOps.prepare()
+                    /*projectName = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
                     echo("***** Project Name: ${projectName}");
                     
                     def pom = readMavenPom file: 'pom.xml'
@@ -52,7 +52,7 @@ pipeline {
                     echo "***** NroPase: ${nroPase}"
                     
                     APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
-                    echo "***** Version: ${APP_VERSION}"
+                    echo "***** Version: ${APP_VERSION}"*/
                     
                 }
                 
