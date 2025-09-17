@@ -4,9 +4,9 @@ import sharedlib.GitOpsJenkinsUtils
 //def utilsDocker = new DockerJenkinUtils(this)
 def utilsGitOps = new GitOpsJenkinsUtils(this)
 
-def projectName
-def nroPase
-def projectNameGit
+//def projectName
+//def nroPase
+//def projectNameGit
 
 pipeline {
     agent any
