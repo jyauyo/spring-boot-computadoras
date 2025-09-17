@@ -1,6 +1,8 @@
 @Library("my-shared-library@develop")
-import sharedlib.DockerJenkinUtils
-def utilsDocker = new DockerJenkinUtils(this)
+//import sharedlib.DockerJenkinsUtils
+import sharedlib.GitOpsJenkinsUtils
+//def utilsDocker = new DockerJenkinUtils(this)
+def utilsDocker = new GitOpsJenkinsUtils(this)
 
 def projectName
 def nroPase
@@ -75,7 +77,7 @@ pipeline {
             }
            steps {               
                script {
-                   utilsDocker.build(projectName: "${projectName}", version: "${APP_VERSION}")
+                   utilsDocker.buildAndPushImage(projectName: "${projectName}", version: "${APP_VERSION}")
                }
                echo "***** Cleaning ..."
                sh 'mvn clean'
@@ -171,14 +173,15 @@ pipeline {
             //}
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: "${env.ARGOCD_CREDENTIALS_ID}", usernameVariable: 'ARGOCD_USERNAME', passwordVariable: 'ARGOCD_PASSWORD')]) {
+                    utilsDocker.syncWithArgoCd(projectName: "${projectName}", version: "${APP_VERSION}", nroPase: "${nroPase}")
+                    /*withCredentials([usernamePassword(credentialsId: "${env.ARGOCD_CREDENTIALS_ID}", usernameVariable: 'ARGOCD_USERNAME', passwordVariable: 'ARGOCD_PASSWORD')]) {
                         sh "argocd login ${ARGOCD_HOST} --username ${env.ARGOCD_USERNAME} --password ${env.ARGOCD_PASSWORD} --insecure"
                         sh "argocd app set sistema-solar --sync-policy none --grpc-web;"
                         sh "argocd app set sistema-solar --revision ${BRANCH} --grpc-web;"
                         sh "argocd app set sistema-solar --sync-policy automated --grpc-web;"
                         sh "argocd app sync sistema-solar"
                         sh "argocd app patch sistema-solar --patch '{\"metadata\":{\"labels\":{\"paseNro\":\"${nroPase}\"}}}' --type merge"
-                    }
+                    }*/
                 }
             }
         }
