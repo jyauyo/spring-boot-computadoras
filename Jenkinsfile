@@ -77,7 +77,7 @@ pipeline {
             //}
            steps {               
                script {
-                   utilsGitOps.buildAndPushImage(projectName: "${projectName}", version: "${APP_VERSION}")
+                   utilsGitOps.buildAndPushImage()
                }
                echo "***** Cleaning ..."
                sh 'mvn clean'
