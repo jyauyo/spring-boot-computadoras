@@ -79,10 +79,10 @@ pipeline {
                script {
                    utilsGitOps.buildAndPushImage()
                }
-               echo "***** Cleaning ..."
-               sh 'mvn clean'
+               //echo "***** Cleaning ..."
+               //sh 'mvn clean'
 
-               writeFile file: 'nroPase.txt', text:"""${nroPase}"""               
+               //writeFile file: 'nroPase.txt', text:"""${nroPase}"""               
             }
         }
 
@@ -173,7 +173,7 @@ pipeline {
             //}
             steps {
                 script {
-                    utilsGitOps.syncWithArgoCd(projectName: "${projectName}", version: "${version}", nroPase: "${nroPase}", branch: "${BRANCH}")
+                    utilsGitOps.syncWithArgoCd()
                 }
             }
         }
