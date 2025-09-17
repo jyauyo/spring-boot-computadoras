@@ -60,9 +60,9 @@ pipeline {
         }
 
         stage('Build') {
-            when {
-                expression { false }
-            }
+            //when {
+            //    expression { false }
+            //}
             steps {
                 sh "echo ************* Build ***************"
                 sh "pwd"
@@ -72,9 +72,9 @@ pipeline {
         }
 
         stage('Build Image') {
-            when {
-                expression { false }
-            }
+            //when {
+            //    expression { false }
+            //}
            steps {               
                script {
                    utilsGitOps.buildAndPushImage(projectName: "${projectName}", version: "${APP_VERSION}")
@@ -174,14 +174,6 @@ pipeline {
             steps {
                 script {
                     utilsGitOps.syncWithArgoCd(projectName: "${projectName}", version: "${APP_VERSION}", nroPase: "${nroPase}", branch: "${BRANCH}")
-                    /*withCredentials([usernamePassword(credentialsId: "${env.ARGOCD_CREDENTIALS_ID}", usernameVariable: 'ARGOCD_USERNAME', passwordVariable: 'ARGOCD_PASSWORD')]) {
-                        sh "argocd login ${ARGOCD_HOST} --username ${env.ARGOCD_USERNAME} --password ${env.ARGOCD_PASSWORD} --insecure"
-                        sh "argocd app set sistema-solar --sync-policy none --grpc-web;"
-                        sh "argocd app set sistema-solar --revision ${BRANCH} --grpc-web;"
-                        sh "argocd app set sistema-solar --sync-policy automated --grpc-web;"
-                        sh "argocd app sync sistema-solar"
-                        sh "argocd app patch sistema-solar --patch '{\"metadata\":{\"labels\":{\"paseNro\":\"${nroPase}\"}}}' --type merge"
-                    }*/
                 }
             }
         }
