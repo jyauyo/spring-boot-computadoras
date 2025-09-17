@@ -173,7 +173,7 @@ pipeline {
             //}
             steps {
                 script {
-                    utilsGitOps.syncWithArgoCd(projectName: "${projectName}", version: "${APP_VERSION}", nroPase: "${nroPase}", branch: "${BRANCH}")
+                    utilsGitOps.syncWithArgoCd(projectName: "${projectName}", version: "${version}", nroPase: "${nroPase}", branch: "${BRANCH}")
                 }
             }
         }
