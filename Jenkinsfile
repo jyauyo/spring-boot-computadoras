@@ -171,11 +171,12 @@ pipeline {
             //when {
             //    expression { false }
             //}
-            steps {
-                def argocdRepoYaml = "jyauyo/gitops-argocd.git"
-                def argocdNamespace = "demo"
-                def argocdProject = "demo"
+            steps {                
                 script {
+                    def argocdRepoYaml = "jyauyo/gitops-argocd.git"
+                    def argocdNamespace = "demo"
+                    def argocdProject = "demo"
+                    
                     utilsGitOps.syncWithArgoCd(argocdRepoYaml, argocdNamespace, argocdProject)
                 }
             }
