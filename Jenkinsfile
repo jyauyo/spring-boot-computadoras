@@ -73,10 +73,18 @@ pipeline {
             //    expression { false }
             //}
             steps {
+                /*
                 sh "echo ************* Build ***************"
                 sh "pwd"
                 // Compilar el proyecto usando Maven
                 sh 'mvn -e clean compile'
+                */
+            
+                 script {
+                    docker.image('maven:3.9.11-eclipse-temurin-21').inside {
+                        sh 'mvn -e clean compile'
+                    }
+                }
             }
         }
 
