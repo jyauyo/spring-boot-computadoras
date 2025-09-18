@@ -18,6 +18,10 @@ pipeline {
         }
     }
 
+    options {
+        skipDefaultCheckout()
+    }
+
     environment {
         //JAVA_TOOL_OPTIONS = "-Duser.home=/home/jenkins"
         //DOCKER_REGISTRY = credentials('docker-registry') //"your_dockerhub_username/your_repository"
@@ -42,7 +46,7 @@ pipeline {
 
             steps {
                 
-                //checkout scm                
+                checkout scm                
                 
                 script {
                     
