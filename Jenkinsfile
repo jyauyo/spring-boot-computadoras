@@ -57,7 +57,7 @@ pipeline {
                 script {
                     sh 'mvn --version'
                     sh 'java --version'
-                    sh 'argocd version'
+                    //sh 'argocd version'
                     
                     utilsGitOps.prepare()
                     /*projectName = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
