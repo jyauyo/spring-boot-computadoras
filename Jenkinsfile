@@ -203,12 +203,12 @@ pipeline {
 
     }     
     
-    post {
+    /*post {
         success {
             echo 'Build completed successfully!'
         }
         failure {
             echo 'Build failed.'
         }
-    }
+    }*/
 }
