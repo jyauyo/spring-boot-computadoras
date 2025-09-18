@@ -9,13 +9,11 @@ def utilsGitOps = new GitOpsJenkinsUtils(this)
 //def projectNameGit
 
 pipeline {
-    //agent none
-    
+    agent none    
 
     options {
         skipDefaultCheckout()
     }
-
     environment {
         //JAVA_TOOL_OPTIONS = "-Duser.home=/home/jenkins"
         //DOCKER_REGISTRY = credentials('docker-registry') //"your_dockerhub_username/your_repository"
