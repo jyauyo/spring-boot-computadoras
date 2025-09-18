@@ -10,14 +10,7 @@ def utilsGitOps = new GitOpsJenkinsUtils(this)
 
 pipeline {
     //agent none
-    agent {
-        docker {
-            //image 'maven:3.9.11-eclipse-temurin-21'
-            image 'docker:28.1.1'
-            //args '-u root -e USERPROFILE=/home/jenkins -v $HOME/.m2:/home/jenkins/.m2:z -e MAVEN_CONFIG=/home/jenkins/.m2 -e MAVEN_OPTS="-Duser.home=/home/jenkins'
-            args '-v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS="-Duser.home=/var/maven'
-        }
-    }
+    
 
     options {
         skipDefaultCheckout()
@@ -47,18 +40,15 @@ pipeline {
         stage('Prepare') {
 
             agent {
-                        docker {
-                            image 'maven:3.9.11-eclipse-temurin-21'
-                            //args '-u root -e USERPROFILE=/home/jenkins -v $HOME/.m2:/home/jenkins/.m2:z -e MAVEN_CONFIG=/home/jenkins/.m2 -e MAVEN_OPTS="-Duser.home=/home/jenkins'
-                            args '-v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS="-Duser.home=/var/maven'
-                        }
+                docker {
+                    image 'maven:3.9.11-eclipse-temurin-21'
+                    args '-v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS="-Duser.home=/var/maven'
                 }
+            }
 
             steps {
                 
                 checkout scm                
-
-                
                 
                 script {
                     
@@ -78,28 +68,21 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Compile && Test') {
             //when {
             //    expression { false }
             //}
-            steps {
-                
-                sh "echo ************* Build ***************"
-                sh "pwd"
-                // Compilar el proyecto usando Maven
-                sh 'mvn -e clean compile'
-                
-            }
-        }
-
-        stage('Test') {
-            //when {
-            //    expression { false }
-            //}
+            agent {
+                docker {
+                    image 'maven:3.9.11-eclipse-temurin-21'
+                    args '-v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS="-Duser.home=/var/maven'
+                }
+            }            
             steps {                
                 sh "pwd"
                 // Compilar el proyecto usando Maven
-                sh 'mvn clean install'
+                sh 'mvn clean compile'
+                sh 'mvn package'
             }
         }
 
