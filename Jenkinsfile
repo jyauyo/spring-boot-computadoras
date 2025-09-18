@@ -13,7 +13,7 @@ pipeline {
     agent {
         docker {
             image 'jyauyor/maven-argocd-jdk21:1.0.3'
-            args '-v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven -v /var/run/docker.sock:/var/run/docker.sock'
+            args '-u jenkins -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven -v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
 
@@ -209,10 +209,10 @@ pipeline {
                     def argocdRepoYaml = "jyauyo/gitops-argocd.git"
                     def argocdNamespace = "demo"
                     def argocdProject = "demo"
-
-                    dir("/tmp") {
+                    sh "pwd"
+                    //dir("/tmp") {
                         utilsGitOps.syncWithArgoCd(argocdRepoYaml, argocdNamespace, argocdProject)                        
-                    }
+                    //}
                     
                 }
             }
