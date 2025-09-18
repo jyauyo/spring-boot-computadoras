@@ -209,10 +209,11 @@ pipeline {
                     def argocdRepoYaml = "jyauyo/gitops-argocd.git"
                     def argocdNamespace = "demo"
                     def argocdProject = "demo"
-                    sh "pwd"
-                    //dir("/tmp") {
+                    sh 'pwd'
+                    dir("/tmp/algo") {
+                        sh 'pwd'
                         utilsGitOps.syncWithArgoCd(argocdRepoYaml, argocdNamespace, argocdProject)                        
-                    //}
+                    }
                     
                 }
             }
