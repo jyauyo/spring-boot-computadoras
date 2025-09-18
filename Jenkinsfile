@@ -210,7 +210,7 @@ pipeline {
                     def argocdNamespace = "demo"
                     def argocdProject = "demo"
 
-                    dir("/tmp") {
+                    dir("/var/maven") {
                         utilsGitOps.syncWithArgoCd(argocdRepoYaml, argocdNamespace, argocdProject)                        
                     }
                     
