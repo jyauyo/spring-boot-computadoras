@@ -192,6 +192,7 @@ pipeline {
             agent {
                 docker {
                     image 'argoproj/argocd:v2.6.15'
+                    args '-u 110:110'
                 }
             }
             steps {                
