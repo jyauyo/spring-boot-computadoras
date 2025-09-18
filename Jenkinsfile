@@ -191,7 +191,7 @@ pipeline {
             //}
             agent {
                 docker {
-                    image 'docker argoproj/argocd:v2.6.15'
+                    image 'argoproj/argocd:v2.6.15'
                 }
             }
             steps {                
