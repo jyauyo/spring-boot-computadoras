@@ -22,7 +22,7 @@ pipeline {
     }
     agent {
         docker {
-            image 'maven:3.6.11-jdk-21'
+            image 'maven:3.9.11-eclipse-temurin-21'
             args '-v /tmp/maven:/home/jenkins/.m2 -e MAVEN_CONFIG=/home/jenkins/.m2'
         }
     }
