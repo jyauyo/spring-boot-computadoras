@@ -12,7 +12,8 @@ pipeline {
     //agent none
     agent {
         docker {
-            image 'maven:3.9.11-eclipse-temurin-21'
+            //image 'maven:3.9.11-eclipse-temurin-21'
+            image 'docker:28.1.1'
             //args '-u root -e USERPROFILE=/home/jenkins -v $HOME/.m2:/home/jenkins/.m2:z -e MAVEN_CONFIG=/home/jenkins/.m2 -e MAVEN_OPTS="-Duser.home=/home/jenkins'
             args '-v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS="-Duser.home=/var/maven'
         }
