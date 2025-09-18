@@ -55,7 +55,8 @@ pipeline {
                 checkout scm                
                 
                 script {
-                    
+                    sh 'mvn --version'
+                    sh 'java --version'
                     utilsGitOps.prepare()
                     /*projectName = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
                     echo("***** Project Name: ${projectName}");
