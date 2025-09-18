@@ -10,6 +10,13 @@ def utilsGitOps = new GitOpsJenkinsUtils(this)
 
 pipeline {
     //agent none
+    agent {
+        docker {
+            image 'maven:3.9.11-eclipse-temurin-21'
+            args '-v /tmp/maven:/home/jenkins/.m2 -e MAVEN_CONFIG=/home/jenkins/.m2'
+        }
+    }
+
     environment {
         //JAVA_TOOL_OPTIONS = "-Duser.home=/home/jenkins"
         //DOCKER_REGISTRY = credentials('docker-registry') //"your_dockerhub_username/your_repository"
@@ -20,16 +27,10 @@ pipeline {
         ARGOCD_CREDENTIALS_ID = "argocd-credentials"
         DOCKER_REGISTRY_ENVIRONMENT = ""
     }
-    agent {
-        docker {
-            image 'maven:3.9.11-eclipse-temurin-21'
-            args '-v /tmp/maven:/home/jenkins/.m2 -e MAVEN_CONFIG=/home/jenkins/.m2'
-        }
-    }
    
-    tools {
-        maven 'Maven Apache'
-    }
+    //tools {
+    //    maven 'Maven Apache'
+    //}
 
     parameters {
         string(name: 'BRANCH', defaultValue: 'develop', description: '')
