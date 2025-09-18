@@ -13,7 +13,7 @@ pipeline {
     agent {
         docker {
             image 'maven:3.9.11-eclipse-temurin-21'
-            args '-v /tmp/maven:/home/jenkins/.m2 -e MAVEN_CONFIG=/home/jenkins/.m2'
+            //args '-v /tmp/maven:/home/jenkins/.m2 -e MAVEN_CONFIG=/home/jenkins/.m2'
         }
     }
 
@@ -72,6 +72,12 @@ pipeline {
                 //image 'maven:3.9.11-jdk-21'
                 //args '-v /tmp/maven:/home/jenkins/.m2 -e MAVEN_CONFIG=/home/jenkins/.m2'
             //}
+            agent {
+                docker {
+                    image 'maven:3.9.11-eclipse-temurin-21'
+                    args '-v /tmp/maven:/home/jenkins/.m2 -e MAVEN_CONFIG=/home/jenkins/.m2'
+                }
+            }
             steps {                    
                 sh "echo ************* Build ***************"
                 sh "pwd"
@@ -84,14 +90,16 @@ pipeline {
             //when {
             //    expression { false }
             //}
-            //docker {
-                //image 'maven:3.9.11-jdk-21'
-                //args '-v /tmp/maven:/home/jenkins/.m2 -e MAVEN_CONFIG=/home/jenkins/.m2'
-            //}            
-           steps {               
-               script {
-                   utilsGitOps.buildAndPushImage()
-               }
+            agent {
+                docker {
+                    image 'docker:28.1.1+1'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                }
+            }
+            steps {
+                script {
+                    utilsGitOps.buildAndPushImage()
+                }
                //echo "***** Cleaning ..."
                //sh 'mvn clean'
 
