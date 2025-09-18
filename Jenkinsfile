@@ -210,7 +210,8 @@ pipeline {
                     def argocdNamespace = "demo"
                     def argocdProject = "demo"
                     sh 'pwd'
-                    dir("/tmp/algo") {
+                    sh 'mkdir yuyin'
+                    dir("yuyin") {
                         sh 'pwd'
                         utilsGitOps.syncWithArgoCd(argocdRepoYaml, argocdNamespace, argocdProject)                        
                     }
