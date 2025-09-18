@@ -69,7 +69,19 @@ pipeline {
                 sh "echo ************* Build ***************"
                 sh "pwd"
                 // Compilar el proyecto usando Maven
-                sh 'mvn clean install'                
+                sh 'mvn -e clean compile'
+            }
+        }
+
+        stage('Test') {
+            //when {
+            //    expression { false }
+            //}
+            steps {                    
+                sh "echo ************* Build ***************"
+                sh "pwd"
+                // Compilar el proyecto usando Maven
+                sh 'mvn clean install'
             }
         }
 
