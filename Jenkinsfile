@@ -31,6 +31,7 @@ pipeline {
         GITHUB_CREDENTIALS_ID = "github-credentials-jyauyo"
         ARGOCD_CREDENTIALS_ID = "argocd-credentials"
         DOCKER_REGISTRY_ENVIRONMENT = ""
+        DOCKER_CONFIG = "/tmp/.docker"
     }
    
     //tools {
