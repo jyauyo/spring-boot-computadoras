@@ -66,7 +66,7 @@ pipeline {
             }
         }
 
-        stage('Compile && Test') {
+        stage('Compile') {
             //when {
             //    expression { false }
             //}
