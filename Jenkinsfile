@@ -66,7 +66,6 @@ pipeline {
             //    expression { false }
             //}
             steps {
-                sh "echo $MAVEN_HOME "
                 sh "echo ************* Build ***************"
                 sh "pwd"
                 // Compilar el proyecto usando Maven
