@@ -169,8 +169,7 @@ pipeline {
                            git checkout -b ${newBranchName}
                            git add .
                            git commit -m "Updated Deployment Manifest" -m "nroPase: ${nroPase}"
-                            """
-        
+                            """        
                                 
                             //withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                             //withCredentials([gitUsernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", gitToolName: 'Default')]) {
@@ -190,6 +189,10 @@ pipeline {
             //when {
             //    expression { false }
             //}
+            docker {
+                    image 'maven:3.9.11-eclipse-temurin-21'
+                    args '-v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS="-Duser.home=/var/maven'
+            }
             steps {                
                 script {
                     def argocdRepoYaml = "jyauyo/gitops-argocd.git"
