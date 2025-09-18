@@ -13,7 +13,7 @@ pipeline {
     agent {
         docker {
             image 'jyauyor/maven-argocd-jdk21:1.0.1'
-            args '-v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven -v /var/run/docker.sock:/var/run/docker.sock'
+            args '-u jenkins -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven -v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
 
@@ -57,7 +57,7 @@ pipeline {
                 script {
                     sh 'mvn --version'
                     sh 'java --version'
-                    sh 'argocd version'
+                    //sh 'argocd version'
                     
                     utilsGitOps.prepare()
                     /*projectName = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
