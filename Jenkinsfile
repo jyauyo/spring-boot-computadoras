@@ -9,9 +9,9 @@ def utilsGitOps = new GitOpsJenkinsUtils(this)
 //def projectNameGit
 
 pipeline {
-    agent any
+    agent none
     environment {
-    //    JAVA_TOOL_OPTIONS = "-Duser.home=/home/jenkins"
+        //JAVA_TOOL_OPTIONS = "-Duser.home=/home/jenkins"
         //DOCKER_REGISTRY = credentials('docker-registry') //"your_dockerhub_username/your_repository"
         DOCKER_REGISTRY = "jyauyor"
         DOCKER_URL = "https://index.docker.io/v1/"
@@ -20,12 +20,12 @@ pipeline {
         ARGOCD_CREDENTIALS_ID = "argocd-credentials"
         DOCKER_REGISTRY_ENVIRONMENT = ""
     }
-    //agent {
-    //    docker {
-    //        image 'maven:3.6.3-jdk-13'
-    //        args '-v /tmp/maven:/home/jenkins/.m2 -e MAVEN_CONFIG=/home/jenkins/.m2'
-    //    }
-    //}
+    agent {
+        docker {
+            image 'maven:3.6.11-jdk-21'
+            args '-v /tmp/maven:/home/jenkins/.m2 -e MAVEN_CONFIG=/home/jenkins/.m2'
+        }
+    }
    
     tools {
         maven 'Maven Apache'
@@ -37,12 +37,16 @@ pipeline {
     
     stages {
         stage('Prepare') {
-            
+            //docker {
+                //image 'maven:3.9.11-jdk-21'
+                //args '-v /tmp/maven:/home/jenkins/.m2 -e MAVEN_CONFIG=/home/jenkins/.m2'
+            //}
             steps {
                 
                 //checkout scm                
                 
                 script {
+                    
                     utilsGitOps.prepare()
                     /*projectName = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
                     echo("***** Project Name: ${projectName}");
@@ -63,11 +67,15 @@ pipeline {
             //when {
             //    expression { false }
             //}
-            steps {
+            //docker {
+                //image 'maven:3.9.11-jdk-21'
+                //args '-v /tmp/maven:/home/jenkins/.m2 -e MAVEN_CONFIG=/home/jenkins/.m2'
+            //}
+            steps {                    
                 sh "echo ************* Build ***************"
                 sh "pwd"
                 // Compilar el proyecto usando Maven
-                sh 'mvn clean install'
+                sh 'mvn clean install'                
             }
         }
 
@@ -75,6 +83,10 @@ pipeline {
             //when {
             //    expression { false }
             //}
+            //docker {
+                //image 'maven:3.9.11-jdk-21'
+                //args '-v /tmp/maven:/home/jenkins/.m2 -e MAVEN_CONFIG=/home/jenkins/.m2'
+            //}            
            steps {               
                script {
                    utilsGitOps.buildAndPushImage()
