@@ -84,7 +84,7 @@ pipeline {
             }
         }
 
-        stage('Build and Push Image') {
+        stage('Build & Push Image') {
             //when {
             //    expression { false }
             //}
