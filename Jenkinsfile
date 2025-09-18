@@ -192,7 +192,7 @@ pipeline {
             agent {
                 docker {
                     image 'argoproj/argocd:v2.6.15'
-                    args '-u root'
+                    args '-v $HOME/.config:/var/maven/.config:z'
                 }
             }
             steps {                
