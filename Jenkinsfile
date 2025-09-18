@@ -46,17 +46,19 @@ pipeline {
     stages {
         stage('Prepare') {
 
-            steps {
-                
-                checkout scm                
-
-                agent {
+            agent {
                         docker {
                             image 'maven:3.9.11-eclipse-temurin-21'
                             //args '-u root -e USERPROFILE=/home/jenkins -v $HOME/.m2:/home/jenkins/.m2:z -e MAVEN_CONFIG=/home/jenkins/.m2 -e MAVEN_OPTS="-Duser.home=/home/jenkins'
                             args '-v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS="-Duser.home=/var/maven'
                         }
                 }
+
+            steps {
+                
+                checkout scm                
+
+                
                 
                 script {
                     
