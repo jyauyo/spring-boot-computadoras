@@ -65,7 +65,8 @@ pipeline {
             //when {
             //    expression { false }
             //}
-            steps {                    
+            steps {
+                echo "$MAVEN_HOME "
                 sh "echo ************* Build ***************"
                 sh "pwd"
                 // Compilar el proyecto usando Maven
@@ -77,8 +78,7 @@ pipeline {
             //when {
             //    expression { false }
             //}
-            steps {                    
-                sh "echo ************* $MAVEN_HOME ***************"
+            steps {                
                 sh "pwd"
                 // Compilar el proyecto usando Maven
                 sh 'mvn clean install'
