@@ -91,7 +91,7 @@ pipeline {
             agent {
                 docker {
                     image 'docker:28.1.1'
-                    args '-u jenkins -v /var/run/docker.sock:/var/run/docker.sock'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
                 }
             }
             steps {
