@@ -13,7 +13,7 @@ pipeline {
     agent {
         docker {
             image 'maven:3.9.11-eclipse-temurin-21'
-            args '-u jenkins -v /var/run/docker.sock:/var/run/docker.sock -v /tmp/maven:/home/jenkins/.m2 -e USERPROFILE=/home/jenkins'
+            args '-v /var/run/docker.sock:/var/run/docker.sock -v /tmp/maven:/home/jenkins/.m2 -e USERPROFILE=/home/jenkins'
         }
     }
 
@@ -78,7 +78,7 @@ pipeline {
             //    expression { false }
             //}
             steps {                    
-                sh "echo ************* Build ***************"
+                sh "echo ************* $MAVEN_HOME ***************"
                 sh "pwd"
                 // Compilar el proyecto usando Maven
                 sh 'mvn clean install'
