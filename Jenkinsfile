@@ -1,12 +1,7 @@
 @Library("my-shared-library@develop")
-//import sharedlib.DockerJenkinsUtils
 import sharedlib.GitOpsJenkinsUtils
-//def utilsDocker = new DockerJenkinUtils(this)
-def utilsGitOps = new GitOpsJenkinsUtils(this)
 
-//def projectName
-//def nroPase
-//def projectNameGit
+def utilsGitOps = new GitOpsJenkinsUtils(this)
 
 pipeline {
     agent none
@@ -15,15 +10,7 @@ pipeline {
         skipDefaultCheckout()
     }
     environment {
-        //JAVA_TOOL_OPTIONS = "-Duser.home=/home/jenkins"
         //DOCKER_REGISTRY = credentials('docker-registry') //"your_dockerhub_username/your_repository"
-        DOCKER_REGISTRY = "jyauyor"
-        DOCKER_URL = "https://index.docker.io/v1/"
-        DOCKER_CREDENTIALS_ID = "dockerhub-credentials"
-        GITHUB_CREDENTIALS_ID = "github-credentials-jyauyo"
-        ARGOCD_CREDENTIALS_ID = "argocd-credentials"
-        DOCKER_REGISTRY_ENVIRONMENT = ""
-        DOCKER_CONFIG = "/tmp/.docker"
     }
    
     //tools {
@@ -38,7 +25,7 @@ pipeline {
         stage('Prepare') {
             agent {
                 docker {
-                    image 'jyauyor/maven-argocd-jdk21:1.0.3'
+                    image 'jyauyor/maven-argocd-jdk21:1.0.4'
                     args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
                 }
             }
@@ -50,19 +37,8 @@ pipeline {
                 script {
                     sh 'mvn --version'
                     sh 'java --version'
-                    //sh 'argocd version'
                     
-                    utilsGitOps.prepare()
-                    /*projectName = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
-                    echo("***** Project Name: ${projectName}");
-                    
-                    def pom = readMavenPom file: 'pom.xml'
-                    nroPase = pom.properties.nroPase
-                    echo "***** NroPase: ${nroPase}"
-                    
-                    APP_VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
-                    echo "***** Version: ${APP_VERSION}"*/
-                    
+                    utilsGitOps.prepare()                    
                 }
                 
             }
@@ -74,12 +50,11 @@ pipeline {
             //}
             agent {
                 docker {
-                    image 'jyauyor/maven-argocd-jdk21:1.0.3'
+                    image 'jyauyor/maven-argocd-jdk21:1.0.4'
                     args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
                 }
             }           
             steps {                
-                sh "pwd"
                 // Compilar el proyecto usando Maven
                 sh 'mvn clean compile'
                 sh 'mvn package'
@@ -92,7 +67,7 @@ pipeline {
             //}
             agent {
                 docker {
-                    image 'jyauyor/maven-argocd-jdk21:1.0.3'
+                    image 'jyauyor/maven-argocd-jdk21:1.0.4'
                     args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
                 }
             }
@@ -100,7 +75,7 @@ pipeline {
                 script {
                     utilsGitOps.buildAndPushImage()
                 }
-               //echo "***** Cleaning ..."
+
                //sh 'mvn clean'
 
                //writeFile file: 'nroPase.txt', text:"""${nroPase}"""               
@@ -193,7 +168,7 @@ pipeline {
             //}
             agent {
                 docker {
-                    image 'jyauyor/maven-argocd-jdk21:1.0.3'
+                    image 'jyauyor/maven-argocd-jdk21:1.0.4'
                     args '-v /tmp:/tmp -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
                 }
             }
