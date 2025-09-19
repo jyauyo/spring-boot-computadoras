@@ -3,6 +3,8 @@ import sharedlib.GitOpsJenkinsUtils
 
 def utilsGitOps = new GitOpsJenkinsUtils(this)
 
+def argocdRepoYaml = "jyauyo/gitops-argocd.git"
+
 pipeline {
     //agent none
     agent {
@@ -72,7 +74,7 @@ pipeline {
             }
         }
 
-        stage('Clonacion Update YAML') {
+        stage('Update YAML') {
             when {
                 expression { false }
             }
@@ -155,7 +157,7 @@ pipeline {
         stage('Sync with ArgoCD') {
             steps {                
                 script {
-                    def argocdRepoYaml = "jyauyo/gitops-argocd.git"
+                    
                     def argocdNamespace = "demo"
                     def argocdProject = "demo"
 
