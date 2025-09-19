@@ -204,6 +204,7 @@ pipeline {
                     //args '-u root'
                 //}
             //}
+            agent none
             steps {                
                 script {
                     def argocdRepoYaml = "jyauyo/gitops-argocd.git"
