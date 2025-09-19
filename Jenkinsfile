@@ -10,7 +10,7 @@ pipeline {
         skipDefaultCheckout()
     }
     environment {
-        //DOCKER_REGISTRY = credentials('docker-registry') //"your_dockerhub_username/your_repository"
+        DOCKER_REGISTRY_SECRET = credentials('docker-registry') //"your_dockerhub_username/your_repository"
     }
    
     //tools {
