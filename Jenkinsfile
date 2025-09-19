@@ -4,7 +4,13 @@ import sharedlib.GitOpsJenkinsUtils
 def utilsGitOps = new GitOpsJenkinsUtils(this)
 
 pipeline {
-    agent none
+    //agent none
+    agent {
+        docker {
+            image 'jyauyor/maven-argocd-jdk21:1.0.4'
+            args '-v /tmp:/tmp -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
+        }
+    }
     
     options {
         skipDefaultCheckout()
@@ -23,12 +29,12 @@ pipeline {
     
     stages {
         stage('Prepare') {
-            agent {
-                docker {
-                    image 'jyauyor/maven-argocd-jdk21:1.0.4'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
-                }
-            }
+            //agent {
+                //docker {
+                    //image 'jyauyor/maven-argocd-jdk21:1.0.4'
+                    //args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
+                //}
+            //}
 
             steps {
                 
@@ -48,12 +54,13 @@ pipeline {
             //when {
             //    expression { false }
             //}
-            agent {
-                docker {
-                    image 'jyauyor/maven-argocd-jdk21:1.0.4'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
-                }
-            }           
+            //agent {
+                //docker {
+                    //image 'jyauyor/maven-argocd-jdk21:1.0.4'
+                    //args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
+                //}
+            //}
+            
             steps {                
                 // Compilar el proyecto usando Maven
                 sh 'mvn clean compile'
@@ -65,12 +72,12 @@ pipeline {
             //when {
             //    expression { false }
             //}
-            agent {
-                docker {
-                    image 'jyauyor/maven-argocd-jdk21:1.0.3'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
-                }
-            }
+            //agent {
+                //docker {
+                    //image 'jyauyor/maven-argocd-jdk21:1.0.3'
+                    //args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
+                //}
+            //}
             steps {
                 script {
                     utilsGitOps.buildAndPushImage()
@@ -166,12 +173,12 @@ pipeline {
             //when {
             //    expression { false }
             //}
-            agent {
-                docker {
-                    image 'jyauyor/maven-argocd-jdk21:1.0.4'
-                    args '-v /tmp:/tmp -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
-                }
-            }
+            //agent {
+                //docker {
+                    //image 'jyauyor/maven-argocd-jdk21:1.0.4'
+                    //args '-v /tmp:/tmp -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
+                //}
+            //}
 
             steps {                
                 script {
