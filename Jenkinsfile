@@ -68,7 +68,7 @@ pipeline {
 
                sh 'mvn clean'
 
-               writeFile file: 'nroPase.txt', text:"""${nroPase}"""               
+               //writeFile file: 'nroPase.txt', text:"""${nroPase}"""
             }
         }
 
