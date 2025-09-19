@@ -9,9 +9,9 @@ pipeline {
     options {
         skipDefaultCheckout()
     }
-    environment {
-        DOCKER_REGISTRY_SECRET = credentials('docker-registry') //"your_dockerhub_username/your_repository"
-    }
+    //environment {
+        //DOCKER_REGISTRY_SECRET = credentials('docker-registry') //"your_dockerhub_username/your_repository"
+    //}
    
     //tools {
     //    maven 'Maven Apache'
