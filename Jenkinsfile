@@ -39,38 +39,19 @@ pipeline {
     
     stages {
         stage('Prepare') {
-            //agent {
-                //docker {
-                    //image 'jyauyor/maven-argocd-jdk21:1.0.4'
-                    //args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
-                //}
-            //}
 
             steps {
-                
-                checkout scm                
-                
+                checkout scm
                 script {
                     sh 'mvn --version'
                     sh 'java --version'
-                    
-                    utilsGitOps.prepare()                    
+
+                    utilsGitOps.prepare()
                 }
-                
             }
         }
 
-        stage('Compile') {
-            //when {
-            //    expression { false }
-            //}
-            //agent {
-                //docker {
-                    //image 'jyauyor/maven-argocd-jdk21:1.0.4'
-                    //args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
-                //}
-            //}
-            
+        stage('Compile') {          
             steps {                
                 // Compilar el proyecto usando Maven
                 //sh 'mvn clean compile'
@@ -80,25 +61,14 @@ pipeline {
         }
 
         stage('Build & Push Image') {
-            //when {
-            //    expression { false }
-            //}
-            //agent {
-                //docker {
-                    //image 'jyauyor/maven-argocd-jdk21:1.0.4'
-                    //args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
-                    //image 'docker:28.1.1'
-                    //args '-v /var/run/docker.sock:/var/run/docker.sock'
-                //}
-            //}
             steps {
                 script {
                     utilsGitOps.buildAndPushImage()
                 }
 
-               //sh 'mvn clean'
+               sh 'mvn clean'
 
-               //writeFile file: 'nroPase.txt', text:"""${nroPase}"""               
+               writeFile file: 'nroPase.txt', text:"""${nroPase}"""               
             }
         }
 
@@ -183,39 +153,17 @@ pipeline {
         }
 
         stage('Sync with ArgoCD') {
-            //when {
-            //    expression { false }
-            //}
-            //agent {
-                //docker {
-                    //image 'jyauyor/maven-argocd-jdk21:1.0.4'
-                    //args '-v /tmp:/tmp -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
-                //}
-            //}
-
             steps {                
                 script {
                     def argocdRepoYaml = "jyauyo/gitops-argocd.git"
                     def argocdNamespace = "demo"
                     def argocdProject = "demo"
 
-                    //dir("/tmp") {
-                        //sh 'pwd'
-                        utilsGitOps.syncWithArgoCd(argocdRepoYaml, argocdNamespace, argocdProject)                        
-                    //}
+                    utilsGitOps.syncWithArgoCd(argocdRepoYaml, argocdNamespace, argocdProject)                        
                     
                 }
             }
         }
-
     }     
-    
-    /*post {
-        success {
-            echo 'Build completed successfully!'
-        }
-        failure {
-            echo 'Build failed.'
-        }
-    }*/
+
 }
