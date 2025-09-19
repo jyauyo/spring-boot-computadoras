@@ -26,6 +26,7 @@ pipeline {
         //ARGOCD_CREDENTIALS_ID = "argocd-credentials"
         //DOCKER_REGISTRY_ENVIRONMENT = ""
         DOCKER_CONFIG = "/tmp/.docker"
+        ARGOCD_CONFIG_DIR = "tmp/.config/argocd/config"
     }
    
     //tools {
