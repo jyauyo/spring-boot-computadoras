@@ -15,9 +15,18 @@ pipeline {
     options {
         skipDefaultCheckout()
     }
-    //environment {
-        //DOCKER_REGISTRY_SECRET = credentials('docker-registry') //"your_dockerhub_username/your_repository"
-    //}
+
+    environment {
+        //JAVA_TOOL_OPTIONS = "-Duser.home=/home/jenkins"
+        //DOCKER_REGISTRY = credentials('docker-registry') //"your_dockerhub_username/your_repository"
+        //DOCKER_REGISTRY = "jyauyor"
+        //DOCKER_URL = "https://index.docker.io/v1/"
+        //DOCKER_CREDENTIALS_ID = "dockerhub-credentials"
+        //GITHUB_CREDENTIALS_ID = "github-credentials-jyauyo"
+        //ARGOCD_CREDENTIALS_ID = "argocd-credentials"
+        //DOCKER_REGISTRY_ENVIRONMENT = ""
+        DOCKER_CONFIG = "/tmp/.docker"
+    }
    
     //tools {
     //    maven 'Maven Apache'
