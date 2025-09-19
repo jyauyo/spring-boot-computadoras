@@ -16,7 +16,7 @@ pipeline {
         skipDefaultCheckout()
     }
 
-    environment {
+    //environment {
         //JAVA_TOOL_OPTIONS = "-Duser.home=/home/jenkins"
         //DOCKER_REGISTRY = credentials('docker-registry') //"your_dockerhub_username/your_repository"
         //DOCKER_REGISTRY = "jyauyor"
@@ -25,9 +25,9 @@ pipeline {
         //GITHUB_CREDENTIALS_ID = "github-credentials-jyauyo"
         //ARGOCD_CREDENTIALS_ID = "argocd-credentials"
         //DOCKER_REGISTRY_ENVIRONMENT = ""
-        DOCKER_CONFIG = "/tmp/.docker"
-        ARGOCD_CONFIG_DIR = "/tmp/.config/argocd/config"
-    }
+        //DOCKER_CONFIG = "/tmp/.docker"
+        //ARGOCD_CONFIG_DIR = "/tmp/.config/argocd/config"
+    //}
    
     //tools {
     //    maven 'Maven Apache'
@@ -85,10 +85,10 @@ pipeline {
             //}
             agent {
                 docker {
-                    //image 'jyauyor/maven-argocd-jdk21:1.0.3'
-                    //args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
-                    image 'docker:28.1.1'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                    image 'jyauyor/maven-argocd-jdk21:1.0.4'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
+                    //image 'docker:28.1.1'
+                    //args '-v /var/run/docker.sock:/var/run/docker.sock'
                 }
             }
             steps {
@@ -199,10 +199,10 @@ pipeline {
                     def argocdNamespace = "demo"
                     def argocdProject = "demo"
 
-                    dir("/tmp") {
-                        sh 'pwd'
+                    //dir("/tmp") {
+                        //sh 'pwd'
                         utilsGitOps.syncWithArgoCd(argocdRepoYaml, argocdNamespace, argocdProject)                        
-                    }
+                    //}
                     
                 }
             }
