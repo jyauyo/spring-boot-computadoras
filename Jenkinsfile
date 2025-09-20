@@ -91,7 +91,7 @@ pipeline {
             agent {
                 docker {
                     image 'jyauyor/maven-argocd-jdk21:1.0.4'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock --publish 2200:22 jenkins/ssh-agent -v /home/jenkins/.ssh:/home/jenkins/.ssh'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
                 }
             }
             steps {
