@@ -140,8 +140,15 @@ pipeline {
                         //}
                     }
                     
-                    
-                    sh "pwd"
+                    sh """ 
+                    #!/bin/bash                    
+                    pwd
+                    cd ${env.WORKSPACE}
+                    pwd
+                    rm -rf ${env.NRO_PASE}
+
+                    """                    
+
                     //sh "cd .."
                     //sh "mkdir clonacion"
                     //sh "cd clonacion"                   
