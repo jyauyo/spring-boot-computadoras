@@ -6,14 +6,14 @@ def utilsGitOps = new GitOpsJenkinsUtils(this)
 def argocdRepoYaml = "jyauyo/gitops-argocd.git"
 
 pipeline {
-    agent defaultAgent()
+    //agent defaultAgent()
     //agent none
-    //agent {
-    //    docker {
-    //        image 'jyauyor/maven-argocd-jdk21:1.0.4'
-    //        args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
-    //    }
-    //}
+    agent {
+        docker {
+            image 'jyauyor/maven-argocd-jdk21:1.0.4'
+            args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
+        }
+    }
     
     options {
         skipDefaultCheckout()
@@ -42,7 +42,6 @@ pipeline {
     
     stages {
         stage('Prepare') {
-
             steps {
                 checkout scm
                 script {
@@ -56,10 +55,9 @@ pipeline {
 
         stage('Compile') {          
             steps {                
-                // Compilar el proyecto usando Maven
-                //sh 'mvn clean compile'
-                //sh 'mvn package'
-                sh 'mvn clean package'
+                sh 'mvn clean compile'
+                sh 'mvn package'
+                //sh 'mvn clean package'
             }
         }
 
@@ -68,10 +66,7 @@ pipeline {
                 script {
                     utilsGitOps.buildAndPushImage()
                 }
-
                sh 'mvn clean'
-
-               //writeFile file: 'nroPase.txt', text:"""${nroPase}"""
             }
         }
 
