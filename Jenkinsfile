@@ -92,6 +92,9 @@ pipeline {
                     pwd
                     """
                     */
+                    def newBranchName = "feature/${env.NRO_PASE}"
+                    def commitMessage = "Agrega la funcionalidad XYZ en la rama" 
+                    
                     dir("${env.NRO_PASE}") {
                         withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                             //sh 'git config --global user.email "jenkins@example.com"'
@@ -102,26 +105,7 @@ pipeline {
                                 sh "git checkout ${BRANCH}"
                                 sh "git pull"
                                 echo "rama clonada ${BRANCH}"
-                            }
-                        }
-                    }
-                    
-                    def newBranchName = "feature/${env.NRO_PASE}"
-                    def commitMessage = "Agrega la funcionalidad XYZ en la rama" 
-                    sh "pwd"
-                    //sh "cd .."
-                    //sh "mkdir clonacion"
-                    //sh "cd clonacion"                   
-                    dir("${env.NRO_PASE}") {
-                        dir("${PROJECT_NAME}") {
-                            
-                                //sh 'git config --global user.email "jenkins@examples.com"'
-                                //sh 'git config --global user.name "Jenkinss"'
-                                //sh "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${projectName}.git"
-                                // Or use the git step directly:
-                                // git branch: 'main', credentialsId: 'your-credential-id', url: 'https://github.com/your-org/your-repo.git'
-        
-                                // Crea una nueva rama y cambia a ella
+
                                 sh "git checkout -b ${newBranchName}"
             
                                 // Simula la creación o modificación de archivos
@@ -134,6 +118,39 @@ pipeline {
                                 // Realiza el commit
                                 sh "git commit -m \"${commitMessage}\""
 
+                                sh "git push https://github.com/jyauyo/${projectName}.git --set-upstream origin ${newBranchName}"
+                                
+                            }
+                        }
+                    }
+                    
+                    
+                    sh "pwd"
+                    //sh "cd .."
+                    //sh "mkdir clonacion"
+                    //sh "cd clonacion"                   
+                    //dir("${env.NRO_PASE}") {
+                        //dir("${PROJECT_NAME}") {
+                            
+                                //sh 'git config --global user.email "jenkins@examples.com"'
+                                //sh 'git config --global user.name "Jenkinss"'
+                                //sh "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${projectName}.git"
+                                // Or use the git step directly:
+                                // git branch: 'main', credentialsId: 'your-credential-id', url: 'https://github.com/your-org/your-repo.git'
+        
+                                // Crea una nueva rama y cambia a ella
+                                //sh "git checkout -b ${newBranchName}"
+            
+                                // Simula la creación o modificación de archivos
+                                // Reemplaza esto con las acciones que necesites para modificar tus archivos
+                                //sh "echo 'Contenido del nuevo archivo' > nuevo_archivo.txt"
+            
+                                // Agrega los cambios
+                                //sh "git add ."
+            
+                                // Realiza el commit
+                                //sh "git commit -m \"${commitMessage}\""
+
                            //sh """
                            //git config --global user.name "Ashfaque-9x"
                            //git config --global user.email "ashfaque.s510@gmail.com" 
@@ -145,13 +162,12 @@ pipeline {
                             //withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                             //withCredentials([gitUsernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", gitToolName: 'Default')]) {
                                 // Envía la nueva rama al repositorio remoto
-                                sh "git push https://github.com/jyauyo/${projectName}.git --set-upstream origin ${newBranchName}"
+                                //sh "git push https://github.com/jyauyo/${projectName}.git --set-upstream origin ${newBranchName}"
         
                                 //sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${projectNameGit} HEAD:main"
-                                echo "Rama '${newBranchName}' creada y cambios commiteados con éxito."
+                                //echo "Rama '${newBranchName}' creada y cambios commiteados con éxito."
                             //}
-                        }
-                    }                    
+                        //}
                 }
             }
         }
