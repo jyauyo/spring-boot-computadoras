@@ -1,4 +1,4 @@
-@Library("my-shared-library@develop")
+@Library("my-shared-library@develop") _
 import sharedlib.GitOpsJenkinsUtils
 
 def utilsGitOps = new GitOpsJenkinsUtils(this)
