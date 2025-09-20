@@ -19,7 +19,8 @@ pipeline {
         skipDefaultCheckout()
     }
 
-    //environment {
+    environment {
+        PUB_KEY = credentials('secret-github')
         //JAVA_TOOL_OPTIONS = "-Duser.home=/home/jenkins"
         //DOCKER_REGISTRY = credentials('docker-registry') //"your_dockerhub_username/your_repository"
         //DOCKER_REGISTRY = "jyauyor"
@@ -30,7 +31,7 @@ pipeline {
         //DOCKER_REGISTRY_ENVIRONMENT = ""
         //DOCKER_CONFIG = "/tmp/.docker"
         //ARGOCD_CONFIG_DIR = "/tmp/.config/argocd/config"
-    //}
+    }
    
     //tools {
     //    maven 'Maven Apache'
@@ -90,7 +91,7 @@ pipeline {
             agent {
                 docker {
                     image 'jyauyor/maven-argocd-jdk21:1.0.4'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock --publish 2200:22 -e "JENKINS_AGENT_SSH_PUBKEY=${PUB_KEY}" jenkins/ssh-agent'
                 }
             }
             steps {
