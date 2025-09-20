@@ -96,7 +96,7 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                             //sh 'git config --global user.email "jenkins@example.com"'
                             //sh 'git config --global user.name "Jenkins"'
-                            sh "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${projectName}.git"
+                            sh "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${env.PROJECT_NAME}.git"
                             
                             dir("${env.PROJECT_NAME}") {
                                 sh "git checkout ${BRANCH}"
