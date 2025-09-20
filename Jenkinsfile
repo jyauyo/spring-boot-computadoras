@@ -12,7 +12,7 @@ pipeline {
     agent {
         docker {
             image 'jyauyor/maven-argocd-jdk21:1.0.4'
-            args '-v /home/jenkins/.ssh:/home/jenkins/.ssh -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven --publish 2200:22 jenkins/ssh-agent'
+            args '-v /home/jenkins/.ssh:/home/jenkins/.ssh -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
         }
     }
     
