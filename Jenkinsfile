@@ -85,7 +85,7 @@ pipeline {
                     mkdir ${nroPase}
                     pwd
                     """
-                    /*
+                    
                     dir("../${nroPase}") {
                         withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                             sh 'git config --global user.email "jenkins@example.com"'
@@ -99,7 +99,7 @@ pipeline {
                             }
                         }
                     }
-                    */
+                    
                     def newBranchName = "feature/${nroPase}"
                     def commitMessage = "Agrega la funcionalidad XYZ en la rama" 
                     sh "pwd"
