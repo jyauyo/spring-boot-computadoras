@@ -53,7 +53,10 @@ pipeline {
             }
         }
 
-        stage('Compile') {          
+        stage('Compile') {
+            when {
+                expression { false }
+            }
             steps {                
                 sh 'mvn clean compile'
                 sh 'mvn package'
@@ -62,6 +65,9 @@ pipeline {
         }
 
         stage('Build & Push Image') {
+            when {
+                expression { false }
+            }
             steps {
                 script {
                     utilsGitOps.buildAndPushImage()
@@ -151,6 +157,9 @@ pipeline {
         }
 
         stage('Sync with ArgoCD') {
+            when {
+                expression { false }
+            }
             steps {                
                 script {
                     
