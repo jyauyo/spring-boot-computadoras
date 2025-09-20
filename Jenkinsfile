@@ -118,8 +118,8 @@ pipeline {
                             //sh "git clone -b ${env.BRANCH} https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${env.PROJECT_NAME}.git"
                         
                             //sh "ssh -T git@github.com"
-                            echo "git clone -b ${env.BRANCH} git@github.com:jyauyo/${env.PROJECT_NAME}.git"
-                            sh "git clone -b develop git@github.com:jyauyo/spring-boot-computadoras.git"
+                            sh "git clone -b ${env.BRANCH} git@github.com:jyauyo/${env.PROJECT_NAME}.git"
+                            //sh "git clone -b develop git@github.com:jyauyo/spring-boot-computadoras.git"
                             dir("${env.PROJECT_NAME}") {
 
                                 sh "git checkout -b ${newBranchName}"
