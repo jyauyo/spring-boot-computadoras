@@ -115,7 +115,7 @@ pipeline {
                     cd /home/jenkins/.ssh
                     ls -ltr
                     cat /etc/hostname
-                    ssh -T git@github.com
+                    
                     pwd
                     """
                     
