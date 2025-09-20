@@ -112,10 +112,13 @@ pipeline {
                     //sh 'git config --global --local user.name "Jenkins"'
                     //sh 'ssh -T git@github.com'
                     dir("${env.NRO_PASE}") {
-                        withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                        //withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                             
-                            sh "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${env.PROJECT_NAME}.git"
-                            
+                            //sh "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${env.PROJECT_NAME}.git"
+                        
+                            sh "git remote set-url origin git@github.com:jyauyo/${env.PROJECT_NAME}.git"
+                            sh "ssh -vT git@github.com"
+                        
                             dir("${env.PROJECT_NAME}") {
                                 sh "git checkout ${BRANCH}"
                                 sh "git pull"
@@ -136,7 +139,7 @@ pipeline {
                                 sh "git push --set-upstream origin ${newBranchName}"
                                 
                             }
-                        }
+                        //}
                     }
                     
                     
