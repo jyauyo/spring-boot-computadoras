@@ -118,14 +118,14 @@ pipeline {
                             //sh "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${env.PROJECT_NAME}.git"
                         
                             sh "git remote set-url origin git@github.com:jyauyo/${env.PROJECT_NAME}.git"
-                            sh "ssh -vT git@github.com"
+                            sh "ssh -T git@github.com"
                         
                             dir("${env.PROJECT_NAME}") {
                                 sh "git checkout ${BRANCH}"
                                 sh "git pull"
                                 echo "rama clonada ${BRANCH}"
 
-                                sh "git checkout -b ${newBranchName}"
+                                //sh "git checkout -b ${newBranchName}"
             
                                 // Simula la creación o modificación de archivos
                                 // Reemplaza esto con las acciones que necesites para modificar tus archivos
