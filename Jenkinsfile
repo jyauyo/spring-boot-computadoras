@@ -146,6 +146,7 @@ pipeline {
             
                                 // Realiza el commit
                                 //sh "ssh -T git@github.com"
+                                sh 'git config --global user.name "jyauyo"'
                                 sh "git commit -m \"${env.NRO_PASE}\" -m \"${commitMessage}\" "
                                 
                                 sh "git push --set-upstream origin ${newBranchName}"
