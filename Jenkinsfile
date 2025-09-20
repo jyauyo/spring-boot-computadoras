@@ -118,7 +118,7 @@ pipeline {
                                 // Realiza el commit
                                 sh "git commit -m \"${commitMessage}\""
 
-                                sh "git push https://github.com/jyauyo/${projectName}.git --set-upstream origin ${newBranchName}"
+                                sh "git push --set-upstream origin ${newBranchName}"
                                 
                             }
                         }
