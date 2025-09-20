@@ -7,7 +7,7 @@ def argocdRepoYaml = "jyauyo/gitops-argocd.git"
 
 pipeline {
     //agent defaultAgent()
-    agent none
+    agent any
     //agent {
         //docker {
             //image 'jyauyor/maven-argocd-jdk21:1.0.4'
@@ -88,12 +88,12 @@ pipeline {
             //    expression { false }
             //}
             
-            agent {
-                docker {
-                    image 'jyauyor/maven-argocd-jdk21:1.0.4'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
-                }
-            }
+            //agent {
+                //docker {
+                    //image 'jyauyor/maven-argocd-jdk21:1.0.4'
+                    //args '-v /var/run/docker.sock:/var/run/docker.sock'
+                //}
+            //}
             steps {
                 script {
                     //projectNameGit = scm.getUserRemoteConfigs()[0].getUrl()
