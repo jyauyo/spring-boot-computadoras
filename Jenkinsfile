@@ -145,9 +145,9 @@ pipeline {
                                 sh "git add ."
             
                                 // Realiza el commit
-                                
-                                sh "git commit -m \"${env.NRO_PASE}\" -m \"${commitMessage}\" "
                                 sh "ssh -T git@github.com"
+                                sh "git commit -m \"${env.NRO_PASE}\" -m \"${commitMessage}\" "
+                                
                                 sh "git push --set-upstream origin ${newBranchName}"
                                 
                             }
