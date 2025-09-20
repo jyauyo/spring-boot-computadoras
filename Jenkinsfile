@@ -80,6 +80,7 @@ pipeline {
             //when {
             //    expression { false }
             //}
+            agent none
             steps {
                 script {
                     //projectNameGit = scm.getUserRemoteConfigs()[0].getUrl()
