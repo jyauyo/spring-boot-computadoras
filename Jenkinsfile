@@ -95,9 +95,9 @@ pipeline {
                     def newBranchName = "feature/${env.NRO_PASE}"
                     def commitMessage = "Agrega la funcionalidad XYZ en la rama" 
                     
-                    sh 'git config --global --local user.email "jenkins@example.com"'
-                    sh 'git config --global --local user.name "Jenkins"'
-                    
+                    //sh 'git config --global --local user.email "jenkins@example.com"'
+                    //sh 'git config --global --local user.name "Jenkins"'
+                    sh 'ssh -T git@github.com'
                     dir("${env.NRO_PASE}") {
                         withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                             
