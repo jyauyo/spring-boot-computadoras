@@ -40,7 +40,7 @@ pipeline {
         string(name: 'BRANCH', defaultValue: 'develop', description: '')
     }
     
-
+    stages {
         stage('Prepare') {
             agent {
                 docker {
