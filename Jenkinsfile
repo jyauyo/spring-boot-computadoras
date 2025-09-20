@@ -71,9 +71,9 @@ pipeline {
         }
 
         stage('Update YAML') {
-            when {
-                expression { false }
-            }
+            //when {
+            //    expression { false }
+            //}
             steps {
                 script {
                     //projectNameGit = scm.getUserRemoteConfigs()[0].getUrl()
@@ -85,7 +85,7 @@ pipeline {
                     mkdir ${nroPase}
                     pwd
                     """
-                    
+                    /*
                     dir("../${nroPase}") {
                         withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                             sh 'git config --global user.email "jenkins@example.com"'
@@ -99,7 +99,7 @@ pipeline {
                             }
                         }
                     }
-
+                    */
                     def newBranchName = "feature/${nroPase}"
                     def commitMessage = "Agrega la funcionalidad XYZ en la rama" 
                     sh "pwd"
@@ -137,13 +137,13 @@ pipeline {
                             """        
                                 
                             //withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-                            //withCredentials([gitUsernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", gitToolName: 'Default')]) {
+                            withCredentials([gitUsernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", gitToolName: 'Default')]) {
                                 // Envía la nueva rama al repositorio remoto
                                 sh "git push https://github.com/jyauyo/${projectName}.git --set-upstream origin ${newBranchName}"
         
                                 //sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${projectNameGit} HEAD:main"
                                 echo "Rama '${newBranchName}' creada y cambios commiteados con éxito."
-                            //}
+                            }
                         }
                     }                    
                 }
