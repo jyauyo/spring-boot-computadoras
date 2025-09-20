@@ -115,11 +115,11 @@ pipeline {
                     dir("${env.NRO_PASE}") {
                         //withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                             
-                            //sh "git clone -b ${BRANCH} https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${env.PROJECT_NAME}.git"
+                            //sh "git clone -b ${env.BRANCH} https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${env.PROJECT_NAME}.git"
                         
                             sh "ssh -T git@github.com"
-                            sh "git clone -b ${BRANCH} git@github.com:jyauyo/${env.PROJECT_NAME}.git"
-                        
+                            sh "git clone -b ${env.BRANCH} git@github.com:jyauyo/${env.PROJECT_NAME}.git"
+
                             dir("${env.PROJECT_NAME}") {
 
                                 sh "git checkout -b ${newBranchName}"
