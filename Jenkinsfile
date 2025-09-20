@@ -83,16 +83,15 @@ pipeline {
             steps {
                 script {
                     //projectNameGit = scm.getUserRemoteConfigs()[0].getUrl()
-                    sh """ 
-                    #!/bin/bash
-                    whoami
+                    /*sh """ 
+                    #!/bin/bash                    
                     pwd
                     cd ..
                     rm -rf ${env.NRO_PASE}
                     mkdir ${env.NRO_PASE}
                     pwd
                     """
-                    
+                    */
                     dir("../${env.NRO_PASE}") {
                         withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                             sh 'git config --global user.email "jenkins@example.com"'
