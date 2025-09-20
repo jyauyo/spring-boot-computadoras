@@ -111,15 +111,15 @@ pipeline {
                     
                     //sh 'git config --global --local user.email "jenkins@example.com"'
                     //sh 'git config --global --local user.name "Jenkins"'
-                    //sh 'ssh -T git@github.com'
+
                     dir("${env.NRO_PASE}") {
                         //withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                             
                             //sh "git clone -b ${env.BRANCH} https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${env.PROJECT_NAME}.git"
                         
-                            sh "ssh -T git@github.com"
-                            sh "git clone -b ${env.BRANCH} git@github.com:jyauyo/${env.PROJECT_NAME}.git"
-
+                            //sh "ssh -T git@github.com"
+                            echo "git clone -b ${env.BRANCH} git@github.com:jyauyo/${env.PROJECT_NAME}.git"
+                            sh "git clone -b develop git@github.com:jyauyo/spring-boot-computadoras.git"
                             dir("${env.PROJECT_NAME}") {
 
                                 sh "git checkout -b ${newBranchName}"
