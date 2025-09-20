@@ -87,18 +87,18 @@ pipeline {
                     #!/bin/bash
                     pwd
                     cd ..
-                    rm -rf ${nroPase}
-                    mkdir ${nroPase}
+                    rm -rf ${env.NRO_PASE}
+                    mkdir ${env.NRO_PASE}
                     pwd
                     """
                     
-                    dir("../${nroPase}") {
+                    dir("../${env.NRO_PASE}") {
                         withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                             sh 'git config --global user.email "jenkins@example.com"'
                             sh 'git config --global user.name "Jenkins"'
                             sh "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${projectName}.git"
                             
-                            dir("${projectName}") {
+                            dir("${env.PROJECT_NAME}") {
                                 sh "git checkout ${BRANCH}"
                                 sh "git pull"
                                 echo "rama clonada ${BRANCH}"
@@ -106,14 +106,14 @@ pipeline {
                         }
                     }
                     
-                    def newBranchName = "feature/${nroPase}"
+                    def newBranchName = "feature/${env.NRO_PASE}"
                     def commitMessage = "Agrega la funcionalidad XYZ en la rama" 
                     sh "pwd"
                     //sh "cd .."
                     //sh "mkdir clonacion"
                     //sh "cd clonacion"                   
-                    dir("../${nroPase}") {
-                        dir("${projectName}") {
+                    dir("../${env.NRO_PASE}") {
+                        dir("${PROJECT_NAME}") {
                             
                                 //sh 'git config --global user.email "jenkins@examples.com"'
                                 //sh 'git config --global user.name "Jenkinss"'
