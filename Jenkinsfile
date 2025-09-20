@@ -107,6 +107,9 @@ pipeline {
                     pwd
                     """
                     */
+                    sh "cd /home/jenkins/.ssh"
+                    sh "ls -ltr"
+                    sh "cat /etc/hostname"
                     def newBranchName = "feature/${env.NRO_PASE}"
                     def commitMessage = "Agrega la funcionalidad XYZ en la rama" 
                     
