@@ -95,13 +95,13 @@ pipeline {
                     def newBranchName = "feature/${env.NRO_PASE}"
                     def commitMessage = "Agrega la funcionalidad XYZ en la rama" 
                     
+                    sh 'git config --global user.email "jenkins@example.com"'
+                    sh 'git config --global user.name "Jenkins"'
+                    
                     dir("${env.NRO_PASE}") {
                         withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                             
                             sh "git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${env.PROJECT_NAME}.git"
-                            
-                            sh 'git config --global user.email "jenkins@example.com"'
-                            sh 'git config --global user.name "Jenkins"'
                             
                             dir("${env.PROJECT_NAME}") {
                                 sh "git checkout ${BRANCH}"
