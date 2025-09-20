@@ -85,6 +85,7 @@ pipeline {
                     //projectNameGit = scm.getUserRemoteConfigs()[0].getUrl()
                     sh """ 
                     #!/bin/bash
+                    whoami
                     pwd
                     cd ..
                     rm -rf ${env.NRO_PASE}
