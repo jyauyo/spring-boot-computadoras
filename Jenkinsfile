@@ -6,14 +6,15 @@ def utilsGitOps = new GitOpsJenkinsUtils(this)
 def argocdRepoYaml = "jyauyo/gitops-argocd.git"
 
 pipeline {
-    //agent defaultAgent()
-    agent any
-    //agent {
-        //docker {
-            //image 'jyauyor/maven-argocd-jdk21:1.0.4'
-            //args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
-        //}
-    //}
+    //agent none
+    //agent any
+    
+    agent {
+        docker {
+            image 'jyauyor/maven-argocd-jdk21:1.0.4'
+            args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
+        }
+    }
     
     options {
         skipDefaultCheckout()
@@ -43,12 +44,12 @@ pipeline {
     
     stages {
         stage('Prepare') {
-            agent {
-                docker {
-                    image 'jyauyor/maven-argocd-jdk21:1.0.4'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
-                }
-            }
+            //agent {
+                //docker {
+                    //image 'jyauyor/maven-argocd-jdk21:1.0.4'
+                    //args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
+                //}
+            //}
             steps {
                 checkout scm
                 script {
