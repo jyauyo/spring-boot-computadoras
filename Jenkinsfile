@@ -92,7 +92,7 @@ pipeline {
                     pwd
                     """
                     */
-                    dir("../${env.NRO_PASE}") {
+                    dir("${env.NRO_PASE}") {
                         withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                             sh 'git config --global user.email "jenkins@example.com"'
                             sh 'git config --global user.name "Jenkins"'
@@ -112,7 +112,7 @@ pipeline {
                     //sh "cd .."
                     //sh "mkdir clonacion"
                     //sh "cd clonacion"                   
-                    dir("../${env.NRO_PASE}") {
+                    dir("${env.NRO_PASE}") {
                         dir("${PROJECT_NAME}") {
                             
                                 //sh 'git config --global user.email "jenkins@examples.com"'
