@@ -4,17 +4,19 @@ import sharedlib.GitOpsJenkinsUtils
 def utilsGitOps = new GitOpsJenkinsUtils(this)
 
 def argocdRepoYaml = "jyauyo/gitops-argocd.git"
+def argocdFileYaml = "solar-system"
+def APP_NAME = "solar-system"
 
 pipeline {
-    //agent none
+
     //agent any
     
-    agent {
-        docker {
-            image 'jyauyor/maven-argocd-jdk21:1.0.4'
-            args '-v /etc/passwd:/etc/passwd -v /home/jenkins/.ssh:/home/jenkins/.ssh -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
-        }
-    }
+    //agent {
+    //    docker {
+    //        image 'jyauyor/maven-argocd-jdk21:1.0.4'
+    //        args '-v /etc/passwd:/etc/passwd -v /home/jenkins/.ssh:/home/jenkins/.ssh -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
+    //    }
+    //}
     
     options {
         skipDefaultCheckout()
@@ -44,12 +46,12 @@ pipeline {
     
     stages {
         stage('Prepare') {
-            //agent {
-            //    docker {
-            //        image 'jyauyor/maven-argocd-jdk21:1.0.4'
-            //        args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
-            //    }
-            //}
+            agent {
+                docker {
+                    image 'jyauyor/maven-argocd-jdk21:1.0.4'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
+                }
+            }
             steps {
                 checkout scm
                 script {
@@ -84,10 +86,36 @@ pipeline {
             }
         }
 
-        stage('Update YAML') {
-            //when {
-            //    expression { false }
-            //}
+        stage("Update the Deployment") {
+            steps {
+                def newBranchName = "feature/${env.NRO_PASE}"
+                def commitMessage = "Agrega la funcionalidad XYZ en la rama"
+
+                dir("${env.NRO_PASE}") {
+                        //withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                            
+                            //sh "git clone -b ${env.BRANCH} https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${env.PROJECT_NAME}.git"
+                        
+                            //sh "ssh -T git@github.com"
+                            
+                    sh "git clone -b ${env.BRANCH} git@github.com:jyauyo/${argocdRepoYaml}.git"
+                    dir("${argocdFileYaml}") {
+                        sh """
+                        cat deployment.yml
+                        sed -i 's/${APP_NAME}.*/${APP_NAME}:${env.VERSION}/g' deployment.yaml
+                        cat deployment.yaml
+                        """
+                    }
+                }
+                
+                
+            }
+        }
+
+        stage('Add File to repository') {
+            when {
+                expression { false }
+            }
             
             //agent {
                 //docker {
@@ -145,7 +173,7 @@ pipeline {
                                 sh "git add ."
             
                                 // Realiza el commit
-                                sh "ssh -T git@github.com"
+                                //sh "ssh -T git@github.com"
                                 
                                 sh "git commit -m \"${env.NRO_PASE}\" -m \"${commitMessage}\" "
                                 sh "pwd"
