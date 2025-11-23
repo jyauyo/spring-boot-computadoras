@@ -7,6 +7,7 @@ def argocdRepoNameYaml = "gitops-argocd"
 def argocdRepoYaml = "jyauyo/gitops-argocd.git"
 def argocdFileYaml = "solar-system"
 def APP_NAME = "solar-system"
+def codApp = "SISCO"
 
 pipeline {
 
@@ -149,28 +150,21 @@ pipeline {
                         // Clono el proyecto de YAML
                         sh "git clone -b ${env.BRANCH} git@github.com:${argocdRepoYaml}"
 
-                        dir("${argocdRepoNameYaml}") {
-                            dir("${argocdFileYaml}") {
+                        dir("${argocdRepoNameYaml}") {                            
 
-                                //Reemplazo la nueva version
-                                sh """
-                                cat deployment.yml
-                                
-                                sed -i 's!siddharth67/${APP_NAME}.*!siddharth67/${APP_NAME}:${env.VERSION}!g' deployment.yml
-                                cat deployment.yml
-                                """
-                            }
+                            def ts = new Date().format("yyyyMMddHHmmss")
+                            def tagName = "RS-${codApp}-${env.VERSION}-${ts}"
+                            printMessage("Tag to create: ${tagName}")
 
-                            // creo una nueva rama
-                            sh "git checkout -b ${newBranchName}"
-
-                            //subo los cambios
-                            sh "git add ."
-                            def commitMessage = "version ${env.VERSION}" 
+                            def commitMessage = "version ${env.VERSION}"
+                            
+                            // creo un tag
+                            sh "git tag -a ${tagName}"                         
+                            
                             sh "git commit -m \"${env.NRO_PASE}\" -m \"${commitMessage}\" "
                             sh "pwd"
-                            sh "git push --set-upstream origin ${newBranchName}"
-                        } 
+                            sh "git push origin ${tagName}"
+                        }
                     }
                     //Borrar la carpeta del pase
                     sh """ 
