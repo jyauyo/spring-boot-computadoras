@@ -3,7 +3,7 @@ import sharedlib.GitOpsJenkinsUtils
 
 def utilsGitOps = new GitOpsJenkinsUtils(this)
 
-def argocdRepoNameYaml = "gitops-argocd.git"
+def argocdRepoNameYaml = "gitops-argocd"
 def argocdRepoYaml = "jyauyo/gitops-argocd.git"
 def argocdFileYaml = "solar-system"
 def APP_NAME = "solar-system"
@@ -101,15 +101,32 @@ pipeline {
                                 //sh "ssh -T git@github.com"
                                 
                         sh "git clone -b ${env.BRANCH} git@github.com:${argocdRepoYaml}"
+
                         dir("${argocdRepoNameYaml}") {
                             dir("${argocdFileYaml}") {
                                 sh """
                                 cat deployment.yml
-                                sed -i 's/${APP_NAME}.*/${APP_NAME}:${env.VERSION}/g' deployment.yaml
-                                cat deployment.yaml
+                                
+                                sed -i 's!siddharth67/${APP_NAME}.*!siddharth67/${APP_NAME}:${env.VERSION}!g' deployment.yml
+                                cat deployment.yml
                                 """
+
+                                sh "git add ."
+                                def commitMessage = "version ${env.VERSION}" 
+                                sh "git commit -m \"${env.NRO_PASE}\" -m \"${commitMessage}\" "
+                                sh "pwd"
+                                sh "git push"
                             }
                         }
+
+                        //Borrar la carpeta
+                        sh """ 
+                        #!/bin/bash                    
+                        pwd
+                        cd ${env.WORKSPACE}
+                        pwd
+                        rm -rf ${env.NRO_PASE}    
+                        """  
                     }
                 }                
             }
