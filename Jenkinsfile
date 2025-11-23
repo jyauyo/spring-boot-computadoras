@@ -90,27 +90,29 @@ pipeline {
         stage("Update the Deployment") {
             steps {
                 script {
-                    def newBranchName = "feature/${env.NRO_PASE}"
-                    def commitMessage = "Agrega la funcionalidad XYZ en la rama"
-    
+                    //Como la carpeta del pase se crea en el stage "prepare" entonces ingreso    
                     dir("${env.NRO_PASE}") {
                             //withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                                 
                                 //sh "git clone -b ${env.BRANCH} https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${env.PROJECT_NAME}.git"
                             
                                 //sh "ssh -T git@github.com"
-                                
+
+                        // Clono el proyecto de YAML
                         sh "git clone -b ${env.BRANCH} git@github.com:${argocdRepoYaml}"
 
                         dir("${argocdRepoNameYaml}") {
                             dir("${argocdFileYaml}") {
+
+                                //Reemplazo la nueva version
                                 sh """
                                 cat deployment.yml
                                 
                                 sed -i 's!siddharth67/${APP_NAME}.*!siddharth67/${APP_NAME}:${env.VERSION}!g' deployment.yml
                                 cat deployment.yml
                                 """
-
+                                
+                                //subo los cambios
                                 sh "git add ."
                                 def commitMessage = "version ${env.VERSION}" 
                                 sh "git commit -m \"${env.NRO_PASE}\" -m \"${commitMessage}\" "
