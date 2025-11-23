@@ -154,16 +154,14 @@ pipeline {
 
                             def ts = new Date().format("yyyyMMddHHmmss")
                             def tagName = "RS-${codApp}-${env.VERSION}-${ts}"
-                            printMessage("Tag to create: ${tagName}")
+                            //printMessage("Tag to create: ${tagName}")
 
                             def commitMessage = "version ${env.VERSION}"
                             
                             // creo un tag
-                            sh "git tag -a ${tagName}"                         
-                            
-                            sh "git commit -m \"${env.NRO_PASE}\" -m \"${commitMessage}\" "
+                            sh "git tag -a ${tagName} -m \"${env.NRO_PASE}\" -m \"${commitMessage}\" "
                             sh "pwd"
-                            sh "git push origin ${tagName}"
+                            sh "git push --tags"
                         }
                     }
                     //Borrar la carpeta del pase
