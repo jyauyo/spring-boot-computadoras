@@ -16,7 +16,7 @@ pipeline {
     //agent {
     //    docker {
     //        image 'jyauyor/maven-argocd-jdk21:1.0.4'
-    //        args '-v /etc/passwd:/etc/passwd -v /home/jenkins/.ssh:/home/jenkins/.ssh -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
+    //        args '-v /etc/passwd:/etc/passwd -v /home/jenkins/.ssh:/home/jenkins/.ssh -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/var/maven/.m2:z -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven -e GIT_CONFIG = /tmp/.git/config'
     //    }
     //}
     
@@ -195,15 +195,17 @@ pipeline {
                         
 
                         dir("${argocdRepoNameYaml}") {
-                            //sh "git checkout main"
+                            sh "git checkout origin main"
+                            sh "git pull"
+                            
                             def tagTemp = "RS-SISCO-0.0.3-SNAPSHOT-20251123022332"
                             sh "git checkout -b temp-${tagTemp} refs/tags/${tagTemp}"
                            
                             def commitMessage = "version ${env.VERSION}"                            
 
                             //sh "git merge ${env.BRANCH} -m \"[ci-master] Merge release tag into master ${env.NRO_PASE}\" -m \"${commitMessage}\" "
-                            sh "git merge -v --no--ff -X theirs temp-${tagTemp} -m \"[ci-master] Merge release tag into master ${env.NRO_PASE}\" -m \"${commitMessage}\" "
-                            sh "git push main"
+                            sh "git merge -v --no-ff -X theirs temp-${tagTemp} -m \"[ci-master] Merge release tag into master ${env.NRO_PASE}\" -m \"${commitMessage}\" "
+                            sh "git push origin main"
                         }
                     }
                     //Borrar la carpeta del pase
