@@ -88,27 +88,27 @@ pipeline {
 
         stage("Update the Deployment") {
             steps {
-                def newBranchName = "feature/${env.NRO_PASE}"
-                def commitMessage = "Agrega la funcionalidad XYZ en la rama"
-
-                dir("${env.NRO_PASE}") {
-                        //withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                script {
+                    def newBranchName = "feature/${env.NRO_PASE}"
+                    def commitMessage = "Agrega la funcionalidad XYZ en la rama"
+    
+                    dir("${env.NRO_PASE}") {
+                            //withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                                
+                                //sh "git clone -b ${env.BRANCH} https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${env.PROJECT_NAME}.git"
                             
-                            //sh "git clone -b ${env.BRANCH} https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${env.PROJECT_NAME}.git"
-                        
-                            //sh "ssh -T git@github.com"
-                            
-                    sh "git clone -b ${env.BRANCH} git@github.com:jyauyo/${argocdRepoYaml}.git"
-                    dir("${argocdFileYaml}") {
-                        sh """
-                        cat deployment.yml
-                        sed -i 's/${APP_NAME}.*/${APP_NAME}:${env.VERSION}/g' deployment.yaml
-                        cat deployment.yaml
-                        """
+                                //sh "ssh -T git@github.com"
+                                
+                        sh "git clone -b ${env.BRANCH} git@github.com:jyauyo/${argocdRepoYaml}.git"
+                        dir("${argocdFileYaml}") {
+                            sh """
+                            cat deployment.yml
+                            sed -i 's/${APP_NAME}.*/${APP_NAME}:${env.VERSION}/g' deployment.yaml
+                            cat deployment.yaml
+                            """
+                        }
                     }
-                }
-                
-                
+                }                
             }
         }
 
