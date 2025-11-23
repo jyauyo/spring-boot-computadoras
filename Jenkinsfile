@@ -3,6 +3,7 @@ import sharedlib.GitOpsJenkinsUtils
 
 def utilsGitOps = new GitOpsJenkinsUtils(this)
 
+def argocdRepoNameYaml = "gitops-argocd.git"
 def argocdRepoYaml = "jyauyo/gitops-argocd.git"
 def argocdFileYaml = "solar-system"
 def APP_NAME = "solar-system"
@@ -100,12 +101,14 @@ pipeline {
                                 //sh "ssh -T git@github.com"
                                 
                         sh "git clone -b ${env.BRANCH} git@github.com:${argocdRepoYaml}"
-                        dir("${argocdFileYaml}") {
-                            sh """
-                            cat deployment.yml
-                            sed -i 's/${APP_NAME}.*/${APP_NAME}:${env.VERSION}/g' deployment.yaml
-                            cat deployment.yaml
-                            """
+                        dir("${argocdRepoNameYaml}") {
+                            dir("${argocdFileYaml}") {
+                                sh """
+                                cat deployment.yml
+                                sed -i 's/${APP_NAME}.*/${APP_NAME}:${env.VERSION}/g' deployment.yaml
+                                cat deployment.yaml
+                                """
+                            }
                         }
                     }
                 }                
