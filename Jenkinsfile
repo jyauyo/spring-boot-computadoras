@@ -119,17 +119,16 @@ pipeline {
                                 sh "pwd"
                                 sh "git push"
                             }
-                        }
-
-                        //Borrar la carpeta
-                        sh """ 
-                        #!/bin/bash                    
-                        pwd
-                        cd ${env.WORKSPACE}
-                        pwd
-                        rm -rf ${env.NRO_PASE}    
-                        """  
+                        } 
                     }
+                    //Borrar la carpeta del pase
+                    sh """ 
+                    #!/bin/bash                    
+                    pwd
+                    cd ${env.WORKSPACE}
+                    pwd
+                    rm -rf ${env.NRO_PASE}    
+                    """ 
                 }                
             }
         }
