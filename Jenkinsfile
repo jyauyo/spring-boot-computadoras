@@ -99,7 +99,7 @@ pipeline {
                             
                                 //sh "ssh -T git@github.com"
                                 
-                        sh "git clone -b ${env.BRANCH} git@github.com:${argocdRepoYaml}.git"
+                        sh "git clone -b ${env.BRANCH} git@github.com:${argocdRepoYaml}"
                         dir("${argocdFileYaml}") {
                             sh """
                             cat deployment.yml
