@@ -87,7 +87,10 @@ pipeline {
             }
         }
 
-        stage("Update the Deployment") {
+        stage("Update the Deployment - DEVELOP") {
+            when {
+                expression { false }
+            }
             steps {
                 script {
                     //Como la carpeta del pase se crea en el stage "prepare" entonces ingreso    
@@ -111,14 +114,62 @@ pipeline {
                                 sed -i 's!siddharth67/${APP_NAME}.*!siddharth67/${APP_NAME}:${env.VERSION}!g' deployment.yml
                                 cat deployment.yml
                                 """
-                                
-                                //subo los cambios
-                                sh "git add ."
-                                def commitMessage = "version ${env.VERSION}" 
-                                sh "git commit -m \"${env.NRO_PASE}\" -m \"${commitMessage}\" "
-                                sh "pwd"
-                                sh "git push"
                             }
+                            //subo los cambios
+                            sh "git add ."
+                            def commitMessage = "version ${env.VERSION}" 
+                            sh "git commit -m \"${env.NRO_PASE}\" -m \"${commitMessage}\" "
+                            sh "pwd"
+                            sh "git push"
+                        } 
+                    }
+                    //Borrar la carpeta del pase
+                    sh """ 
+                    #!/bin/bash                    
+                    pwd
+                    cd ${env.WORKSPACE}
+                    pwd
+                    rm -rf ${env.NRO_PASE}    
+                    """ 
+                }                
+            }
+        }
+
+        stage("Update the Deployment - CERTIFICACION") {
+            steps {
+                script {
+                    //Como la carpeta del pase se crea en el stage "prepare" entonces ingreso    
+                    dir("${env.NRO_PASE}") {
+                            //withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                                
+                                //sh "git clone -b ${env.BRANCH} https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${env.PROJECT_NAME}.git"
+                            
+                                //sh "ssh -T git@github.com"
+
+                        // Clono el proyecto de YAML
+                        sh "git clone -b ${env.BRANCH} git@github.com:${argocdRepoYaml}"
+
+                        dir("${argocdRepoNameYaml}") {
+                            dir("${argocdFileYaml}") {
+
+                                //Reemplazo la nueva version
+                                sh """
+                                cat deployment.yml
+                                
+                                sed -i 's!siddharth67/${APP_NAME}.*!siddharth67/${APP_NAME}:${env.VERSION}!g' deployment.yml
+                                cat deployment.yml
+                                """
+                            }
+
+                            // creo una nueva rama
+                            sh "git checkout -b ${newBranchName}"
+
+                            //subo los cambios
+                            sh "git add ."
+                            def commitMessage = "version ${env.VERSION}" 
+                            sh "git commit -m \"${env.NRO_PASE}\" -m \"${commitMessage}\" "
+                            sh "pwd"
+                            sh "git push --set-upstream origin ${newBranchName}"
                         } 
                     }
                     //Borrar la carpeta del pase
