@@ -136,7 +136,10 @@ pipeline {
             }
         }
 
-        stage("Update the Deployment - CERTIFICACION") {
+        stage("Update the Deployment - CERTIFICATION") {
+            when {
+                expression { false }
+            }
             steps {
                 script {
                     //Como la carpeta del pase se crea en el stage "prepare" entonces ingreso    
@@ -162,6 +165,45 @@ pipeline {
                             sh "git tag -a ${tagName} -m \"${env.NRO_PASE}\" -m \"${commitMessage}\" "
                             sh "pwd"
                             sh "git push --tags"
+                        }
+                    }
+                    //Borrar la carpeta del pase
+                    sh """ 
+                    #!/bin/bash                    
+                    pwd
+                    cd ${env.WORKSPACE}
+                    pwd
+                    rm -rf ${env.NRO_PASE}    
+                    """ 
+                }                
+            }
+        }
+
+        stage("Merge the Deployment - PRODUCTION") {
+            steps {
+                script {
+                    //Como la carpeta del pase se crea en el stage "prepare" entonces ingreso    
+                    dir("${env.NRO_PASE}") {
+                            //withCredentials([usernamePassword(credentialsId: "${env.GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                                
+                                //sh "git clone -b ${env.BRANCH} https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/jyauyo/${env.PROJECT_NAME}.git"
+                            
+                                //sh "ssh -T git@github.com"
+
+                        // Clono el proyecto de YAML
+                        sh "git clone -b ${env.BRANCH} git@github.com:${argocdRepoYaml}"
+                        
+
+                        dir("${argocdRepoNameYaml}") {
+                            //sh "git checkout main"
+                            def tagTemp = "RS-SISCO-0.0.3-SNAPSHOT-20251123022332"
+                            sh "git checkout -b temp-${tagTemp} refs/tags/${tagTemp}"
+                           
+                            def commitMessage = "version ${env.VERSION}"                            
+
+                            //sh "git merge ${env.BRANCH} -m \"[ci-master] Merge release tag into master ${env.NRO_PASE}\" -m \"${commitMessage}\" "
+                            sh "git merge -v --no--ff -X theirs temp-${tagTemp} -m \"[ci-master] Merge release tag into master ${env.NRO_PASE}\" -m \"${commitMessage}\" "
+                            sh "git push main"
                         }
                     }
                     //Borrar la carpeta del pase
