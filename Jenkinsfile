@@ -9,7 +9,7 @@ def APP_NAME = "solar-system"
 
 pipeline {
 
-    //agent any
+    agent any
     
     //agent {
     //    docker {
