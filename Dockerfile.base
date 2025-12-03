@@ -1,0 +1,22 @@
+FROM docker:28.1.1
+
+# Instala dependencias necesarias
+RUN apk add --no-cache openjdk21 maven git curl tar
+
+# Instala Maven 3.9.x (usa la última 3.9.x disponible)
+ENV MAVEN_VERSION=3.9.9
+RUN curl -fsSL https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz \
+    | tar -xz -C /opt
+    
+USER jenkins
+WORKDIR /home/jenkins
+
+# Establece JAVA_HOME
+ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk
+
+ENV M2_HOME=/opt/apache-maven-${MAVEN_VERSION}
+
+
+ENV PATH=$JAVA_HOME/bin:$M2_HOME/bin:$PATH
+
+CMD ["sh"]
